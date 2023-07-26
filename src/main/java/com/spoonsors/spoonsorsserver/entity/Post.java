@@ -4,7 +4,9 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @ToString
 @Getter
@@ -23,8 +25,8 @@ public class Post {
     @JoinColumn(name = "writer_id", nullable = false)
     private BMember bMember;
 
-    @Column( nullable = false) //mediumblob
-    private byte[] post_img;
+    @Column( length = 100)
+    private String post_title;
 
     @Column(length = 400)
     private String post_txt;
@@ -32,11 +34,15 @@ public class Post {
     @ColumnDefault("0")
     private Integer post_state;
 
+    @ColumnDefault("0") //리뷰 없으면 0, 있으면 1
+    private Integer has_review;
+
+    @Temporal(value = TemporalType.TIMESTAMP)
     @Column( nullable = false) //datetime
     private Date post_date;
 
-    //@OneToMany(mappedBy = "post") //todo spon에 post_id 추가하고 연결하기
-    //private List<Spon> spon = new ArrayList<>();
+    @OneToMany(mappedBy = "post")
+    private List<Spon> spon = new ArrayList<>();
 
 
 }

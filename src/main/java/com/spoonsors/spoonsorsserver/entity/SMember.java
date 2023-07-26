@@ -1,10 +1,10 @@
 package com.spoonsors.spoonsorsserver.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.awt.*;
 import java.util.ArrayList;
-
+import java.util.List;
 @ToString
 @Getter
 @Builder
@@ -13,18 +13,20 @@ import java.util.ArrayList;
 @Entity
 public class SMember {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //MySQL의 AUTO_INCREMENT를 사용
+    @Column(length = 100, nullable = false)
     private String sMember_id;
 
-    @Column(nullable = false)
+    @JsonIgnore
+    @Column(length = 100, nullable = false)
     private String sMember_pwd;
-    @Column(nullable = false)
+
+    @Column(length = 100, nullable = false)
     private String sMember_nickname;
-    @Column(nullable = false)
+
+    @Column(length = 100, nullable = false)
     private String sMember_phoneNumber;
 
     @OneToMany(mappedBy = "sMember")
     private List<Spon> spons = new ArrayList<>();
-    //@OneToMany(mappedBy = "sMember")
-    //private List<Review> reviews = new ArrayList<>();
+
 }
