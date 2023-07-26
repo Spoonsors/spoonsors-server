@@ -1,5 +1,6 @@
 package com.spoonsors.spoonsorsserver.entity;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.awt.*;
@@ -19,6 +20,8 @@ public class Delivery {
     @OneToOne // 스폰 하나에 식재료 하나
     @JoinColumn(name = "spon_id",nullable = false)
     private Spon spon;
-    private Integer delivery_state; // 디폴트 설정
+
+    @ColumnDefault("0")
+    private Integer delivery_state;
 
 }

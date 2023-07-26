@@ -1,5 +1,6 @@
 package com.spoonsors.spoonsorsserver.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class BMember {
     @Column(length = 100, nullable = false)
     private String bMember_id;
 
+    @JsonIgnore
     @Column( length = 100, nullable = false)
     private String bMember_pwd;
 
@@ -29,10 +31,10 @@ public class BMember {
     @Column( length = 100, nullable = false)
     private String bMember_address;
 
-    @Column(nullable = false)
+    @Column(nullable = false) //증명서 이미지
     private byte[] bMember_certificate;
 
     @OneToMany(mappedBy = "bMember")
-    private List<Post> members = new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
 
 }

@@ -3,9 +3,9 @@ package com.spoonsors.spoonsorsserver.entity;
 import lombok.*;
 
 import javax.persistence.*;
-        import java.awt.*;
-        import java.sql.Time;
+import java.util.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 @ToString
 @Getter
@@ -24,8 +24,12 @@ public class MealPlanner {
             inverseJoinColumns = @JoinColumn(name = "menu_id"))
     private List<Menu> menu = new ArrayList<>();
 
-    @Column(nullable = false)
+    @Column(length = 100, nullable = false)
     private String mealPlanner_name;
+
+    @Column(length = 10)
     private String level;
-    private Time timeRequired;
+
+    @Temporal(value = TemporalType.TIME)
+    private Date timeRequired;
 }

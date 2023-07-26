@@ -28,6 +28,5 @@ public class Fridge {
     private byte[] fridge_item_img;
 
     @Temporal(value = TemporalType.DATE)
-    @Column(nullable = false)
     private Date expiration_date;
 }

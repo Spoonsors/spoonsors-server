@@ -17,12 +17,15 @@ public class Ingredients {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //MySQL의 AUTO_INCREMENT를 사용
     private Long ingredients_id;
 
-    @Column(nullable = false)
+    @Column(length = 100, nullable = false)
     private String ingredients_name;
 
+    @Column(length = 100)
     private String product_name;
+
     @Column(nullable = false)
     private byte[] ingredients_image;
+
     @Column(nullable = false)
-    private int price;
+    private Integer price;
 }
