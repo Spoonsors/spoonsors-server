@@ -7,7 +7,6 @@ import java.awt.*;
 import java.sql.Time;
 
 @ToString
-@Setter
 @Getter
 @Builder
 @AllArgsConstructor
