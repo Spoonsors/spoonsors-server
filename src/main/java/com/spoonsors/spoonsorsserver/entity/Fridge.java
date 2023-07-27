@@ -7,14 +7,16 @@ import java.util.Date;
 
 @ToString
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Fridge {
     @Id
-    @Column(name = "owner_id", length = 100, nullable = false)
-    private String owner_id;
+    @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
+    @Column(nullable = false)
+    private Long fridge_id;
 
     @OneToOne(fetch = FetchType.EAGER)
     @MapsId  //@Id와 연결시켜 기본키이자 외래키로 사용
@@ -24,7 +26,6 @@ public class Fridge {
     @Column( length = 100, nullable = false)
     private String fridge_item_name;
 
-    @Column( nullable = false) //mediumblob
     private byte[] fridge_item_img;
 
     @Temporal(value = TemporalType.DATE)
