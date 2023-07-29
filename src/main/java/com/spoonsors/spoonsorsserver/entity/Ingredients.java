@@ -7,6 +7,7 @@ import java.awt.*;
 import java.sql.Time;
 
 @ToString
+@Setter
 @Getter
 @Builder
 @AllArgsConstructor
@@ -14,7 +15,7 @@ import java.sql.Time;
 @Entity
 public class Ingredients {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //MySQL의 AUTO_INCREMENT를 사용
+    @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
     private Long ingredients_id;
 
     @Column(length = 100, nullable = false)
