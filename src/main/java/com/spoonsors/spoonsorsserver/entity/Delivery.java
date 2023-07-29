@@ -14,7 +14,7 @@ import java.sql.Time;
 @Entity
 public class Delivery {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //MySQL의 AUTO_INCREMENT를 사용
     private Long delivery_id;
 
     @OneToOne // 스폰 하나에 식재료 하나
