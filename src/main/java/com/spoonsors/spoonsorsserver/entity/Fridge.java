@@ -8,13 +8,14 @@ import java.util.Date;
 
 @ToString
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Fridge {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //MySQL의 AUTO_INCREMENT를 사용
+    @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
     @Column(nullable = false)
     private Long fridge_id;
 
@@ -25,7 +26,6 @@ public class Fridge {
     @Column( length = 100, nullable = false)
     private String fridge_item_name;
 
-    @Column( nullable = false) //mediumblob
     private byte[] fridge_item_img;
 
     @Column(nullable = false)
