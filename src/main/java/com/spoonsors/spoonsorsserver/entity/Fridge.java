@@ -26,6 +26,7 @@ public class Fridge {
     @Column( length = 100, nullable = false)
     private String fridge_item_name;
 
+    @Lob
     private byte[] fridge_item_img;
 
     @Column(nullable = false)

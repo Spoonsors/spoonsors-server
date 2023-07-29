@@ -14,13 +14,11 @@ import java.util.Date;
 public class FridgeDto {
     private String name;
     private Integer isFrized;
-    private byte[] img;
     private Date expirationDate;
 
     public Fridge toEntity(){
         return Fridge.builder()
                 .fridge_id(null)
-                .fridge_item_img(img)
                 .fridge_item_name(name)
                 .expiration_date(expirationDate)
                 .is_frized(isFrized)
