@@ -1,4 +1,5 @@
 package com.spoonsors.spoonsorsserver.entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -6,6 +7,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @ToString
+@Setter
 @Getter
 @Builder
 @AllArgsConstructor
@@ -13,13 +15,14 @@ import java.util.Date;
 @Entity
 public class Spon {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //MySQL의 AUTO_INCREMENT를 사용
+    @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
     private Long spon_id;
 
-    @ManyToOne // 수혜자 하나에 스폰 여러개
-    @JoinColumn(name="sMember_id",nullable = false)
+    @ManyToOne
+    @JoinColumn(name="sMember_id",nullable = true)
     private SMember sMember;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name="post_id")
     private Post post;
