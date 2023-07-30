@@ -18,7 +18,7 @@ public class Ingredients {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //MySQL의 AUTO_INCREMENT를 사용
     private Long ingredients_id;
 
-    @Column(length = 100, nullable = false)
+    @Column(length = 100, nullable = false, unique = true)
     private String ingredients_name;
 
     @Column(length = 100)

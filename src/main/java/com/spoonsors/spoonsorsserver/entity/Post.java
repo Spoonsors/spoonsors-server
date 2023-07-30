@@ -1,5 +1,7 @@
 package com.spoonsors.spoonsorsserver.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -9,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 @ToString
+@Setter
 @Getter
 @Builder
 @AllArgsConstructor
@@ -17,10 +20,11 @@ import java.util.List;
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //MySQL의 AUTO_INCREMENT를 사용
+    @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
     @Column(nullable = false)
     private Long post_id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "writer_id", nullable = false)
     private BMember bMember;
