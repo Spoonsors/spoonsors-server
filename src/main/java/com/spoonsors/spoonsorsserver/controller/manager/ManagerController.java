@@ -18,9 +18,9 @@ public class ManagerController {
         return managerService.findAll();
     }
     // 이름으로 식재료 조회
-    @GetMapping("/manager/findByName")
-    public String read(@RequestParam String ingredients_name){
-        return managerService.findByName(ingredients_name).toString();
+    @GetMapping("/manager/findByName/{ingredients_name}")
+    public Ingredients findByName(@PathVariable String ingredients_name){
+        return managerService.findByName(ingredients_name);
     }
 
     // 식재료 등록
