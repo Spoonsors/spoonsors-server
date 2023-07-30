@@ -32,13 +32,13 @@ public class ManagerService {
     }
 
     //식재료 수정
-    public Long update(Long ingredients_id, byte[] ingredients_image,
-                       String ingredients_name, Integer price, String product_name){
-        Ingredients updateIngredient  = managerRepository.findById(ingredients_id);
-        updateIngredient.setIngredients_name(ingredients_name);
-        updateIngredient.setProduct_name(product_name);
-        updateIngredient.setIngredients_image(ingredients_image);
-        updateIngredient.setPrice(price);
+    public Long update(Ingredients ingredients){
+
+        Ingredients updateIngredient  = managerRepository.findById(ingredients.getIngredients_id());
+        updateIngredient.setIngredients_name(ingredients.getIngredients_name());
+        updateIngredient.setProduct_name(ingredients.getProduct_name());
+        updateIngredient.setIngredients_image(ingredients.getIngredients_image());
+        updateIngredient.setPrice(ingredients.getPrice());
 
         return updateIngredient.getIngredients_id();
     }

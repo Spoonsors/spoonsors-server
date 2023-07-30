@@ -77,7 +77,6 @@ public class ApiService {
             //파싱할 String (Controller에서 호출해 값이 저장된 StringBuilder result)을
             //JSON 객체로 파서를 통해 저장
             JSONObject jsonObj = (JSONObject) jsonParser.parse(result.toString());
-            log.info("jsonObj = {}",jsonObj.toString());
             //데이터 분해 단계
 
             //response를 받아옴
@@ -90,14 +89,12 @@ public class ApiService {
 
             //items 안쪽의 데이터는 [] 즉 배열의 형태이기에 json 배열로 받아온다.
             JSONArray array = (JSONArray) parseResponse.get("row");
-            log.info("array = {}",array.toString());
             //매핑
             for(int i=0;i<array.size();i++){
                 ApiDto apiDto = new ApiDto();
                 jo = (JSONObject) array.get(i);
                 apiDto.setRCP_SEQ(jo.get("RCP_SEQ").toString());
                 apiDto.setRCP_NM(jo.get("RCP_NM").toString());
-                log.info("RCP_NM = {}",apiDto.getRCP_NM());
                 apiDto.setRCP_PAT2(jo.get("RCP_PAT2").toString());
                 apiDto.setINFO_ENG(Float.parseFloat(jo.get("INFO_ENG").toString()));
                 apiDto.setINFO_CAR(Float.parseFloat(jo.get("INFO_CAR").toString()));
@@ -125,19 +122,10 @@ public class ApiService {
                 apiDto.setMANUAL(MANUAL_List);
                 apiDto.setMANUAL_IMG(MANUAL_IMG_List);
 
-//                Map<String, Object> data = new HashMap<>();
-//                data.put("data",apiDto);
                 menuList.add(apiDto);
 
 
-//                try{
-//                   json = new ObjectMapper().writeValueAsString(data);
-//                }catch (Exception e)
-//                {
-//                    e.getMessage();
-//                }
             for(int k=0;k<i;k++){
-                log.info("menuList = {}",menuList.get(k).getRCP_NM());
             }
             }
         }
