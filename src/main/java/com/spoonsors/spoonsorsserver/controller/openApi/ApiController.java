@@ -21,16 +21,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApiController {
     private final ApiService apiService;
-//    private String serviceKey = "54644966ea4145559fc0";
-//    private String serviceId = "COOKRCP01";
-    //모든 데이터 출력
+
+    //모든 메뉴 출력
     @GetMapping("/recipe/findAll")
     public List<ApiDto> allAllApi() throws IOException{
 
         return apiService.findAll();
 
     }
-
+    //이름으로 메뉴 출력
     @GetMapping("/recipe/findByName")
     public List<ApiDto> findByNameApi(@RequestParam String RCP_NM) throws IOException{
 

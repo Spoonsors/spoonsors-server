@@ -5,7 +5,6 @@ import com.spoonsors.spoonsorsserver.entity.Post;
 import com.spoonsors.spoonsorsserver.entity.bMember.PostDto;
 import com.spoonsors.spoonsorsserver.repository.IPostRepository;
 import com.spoonsors.spoonsorsserver.repository.IbMemberRepository;
-import com.spoonsors.spoonsorsserver.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import java.util.Optional;
 @Transactional
 public class PostService {
     private final IPostRepository iPostRepository;
-    private final PostRepository PostRepository;
     private final IbMemberRepository ibMemberRepository;
 
     //글 작성
@@ -42,11 +40,5 @@ public class PostService {
         Optional<Post> optionalPost=iPostRepository.findById(postId);
         Post post=optionalPost.get();
         return post;
-    }
-
-    //내가 작성한 글 보기
-    public List<Post> viewMyPosts(String bMemberId){
-        List<Post> posts=PostRepository.viewMyPostings(bMemberId);
-        return posts;
     }
 }

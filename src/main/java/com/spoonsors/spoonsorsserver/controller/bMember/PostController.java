@@ -24,24 +24,15 @@ public class PostController {
         return "["+post.getPost_title()+"] 작성 완료";
     }
 
-    //전체 글 보기
     @GetMapping("/viewPosting")
     public List<Post> viewAllPosts(){
         List<Post> posts=postService.viewAllPosts();
         return posts;
     }
 
-    //단일 글 보기
     @GetMapping("/viewPosting/{postId}")
     public Post viewPost(@PathVariable Long postId){
         Post post=postService.viewPost(postId);
         return post;
-    }
-
-    //내가 작성한 글 보기
-    @GetMapping("/viewMyPosting/{bMemberId}")
-    public List<Post> viewMyPosts(@PathVariable String bMemberId){
-        List<Post> posts=postService.viewMyPosts(bMemberId);
-        return posts;
     }
 }
