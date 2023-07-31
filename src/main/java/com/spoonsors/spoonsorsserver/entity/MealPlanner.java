@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ToString
+@Setter
 @Getter
 @Builder
 @AllArgsConstructor
@@ -15,17 +16,40 @@ import java.util.List;
 @Entity
 public class MealPlanner {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //MySQL의 AUTO_INCREMENT를 사용
+    @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
     private Long mealPlanner_id;
 
-    @ManyToMany
-    @JoinTable(name = "MealPlanner_Menu",
-            joinColumns = @JoinColumn(name = "mealPlanner_id"),
-            inverseJoinColumns = @JoinColumn(name = "menu_id"))
-    private List<Menu> menu = new ArrayList<>();
+//    @ManyToMany
+//    @JoinTable(name = "MealPlanner_Menu",
+//            joinColumns = @JoinColumn(name = "mealPlanner_id"),
+//            inverseJoinColumns = @JoinColumn(name = "menu_id"))
+//    private List<Menu> menu = new ArrayList<>();
+
+    @Column( nullable = false)
+    private String menu_name1;
+    @Column( nullable = false) //mediumblob
+    private String menu_img1;
+
+    private String menu_name2;
+    private String menu_img2;
+
+    private String menu_name3;
+    private String menu_img3;
+
+
+    private String menu_name4;
+    private String menu_img4;
 
     @Column(length = 100, nullable = false)
     private String mealPlanner_name;
+
+    private Integer kcal;
+
+    private Integer carbohydrate;
+
+    private Integer protein;
+
+    private Integer fat;
 
     @Column(length = 10)
     private String level;

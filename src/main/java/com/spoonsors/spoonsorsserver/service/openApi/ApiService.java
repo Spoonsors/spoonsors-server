@@ -95,6 +95,8 @@ public class ApiService {
                 jo = (JSONObject) array.get(i);
                 apiDto.setRCP_SEQ(jo.get("RCP_SEQ").toString());
                 apiDto.setRCP_NM(jo.get("RCP_NM").toString());
+                apiDto.setATT_FILE_NO_MAIN(jo.get("ATT_FILE_NO_MAIN").toString());
+                apiDto.setATT_FILE_NO_MK(jo.get("ATT_FILE_NO_MK").toString());
                 apiDto.setRCP_PAT2(jo.get("RCP_PAT2").toString());
                 apiDto.setINFO_ENG(Float.parseFloat(jo.get("INFO_ENG").toString()));
                 apiDto.setINFO_CAR(Float.parseFloat(jo.get("INFO_CAR").toString()));

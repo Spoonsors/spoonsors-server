@@ -16,12 +16,16 @@ import java.util.List;
 @NoArgsConstructor
 public class ApiDto {
 
-    // 일련번호
+    //일련번호
     private String RCP_SEQ;
 
     //메뉴명
     private String RCP_NM;
 
+    //메뉴 사진(소)
+    private String ATT_FILE_NO_MAIN;
+    //메뉴 사진(대)
+    private String ATT_FILE_NO_MK;
     //요리종류(밥, 반찬, 국&찌개)
     private String RCP_PAT2;
 
