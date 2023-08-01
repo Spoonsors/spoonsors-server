@@ -14,8 +14,9 @@ public class ManagerRepository {
     private final EntityManager em;
 
     //식재료 등록, 수정
-    public void regist(Ingredients ingredient){
-        em.persist(ingredient);
+    public Ingredients regist(Ingredients ingredientItem){
+        em.persist(ingredientItem);
+        return ingredientItem;
     }
 
     //모든 식재료 조회

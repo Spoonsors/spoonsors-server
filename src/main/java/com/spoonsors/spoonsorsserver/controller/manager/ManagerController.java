@@ -1,11 +1,15 @@
 package com.spoonsors.spoonsorsserver.controller.manager;
 
 import com.spoonsors.spoonsorsserver.entity.Ingredients;
+import com.spoonsors.spoonsorsserver.entity.manager.IngredientsDto;
 import com.spoonsors.spoonsorsserver.service.manager.ManagerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -27,10 +31,15 @@ public class ManagerController {
     }
 
     // 식재료 등록
-    @PostMapping("/manager/create")
-    public String create(@RequestBody Ingredients ingredients){
-        Long ingredientId = managerService.regist(ingredients);
-        return ingredientId + "번 식재료 등록 완료";
+    @PostMapping(value ="/manager/create", consumes = {MediaType.APPLICATION_JSON_VALUE, "multipart/form-data"})
+    public Ingredients create(@RequestPart IngredientsDto ingredientsDto, @RequestPart(value = "img", required = false) MultipartFile img){
+        Ingredients ingredient = null;
+        try{
+            ingredient = managerService.regist(ingredientsDto, img);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return ingredient;
     }
 
     //식재로 수정

@@ -16,6 +16,7 @@ import java.sql.Time;
 public class Ingredients {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
+    @Column(nullable = false)
     private Long ingredients_id;
 
     @Column(length = 100, nullable = false, unique = true)

@@ -1,11 +1,16 @@
 package com.spoonsors.spoonsorsserver.service.manager;
 
 import com.spoonsors.spoonsorsserver.entity.Ingredients;
+import com.spoonsors.spoonsorsserver.entity.manager.IngredientsDto;
+import com.spoonsors.spoonsorsserver.repository.manager.IManagerRepository;
 import com.spoonsors.spoonsorsserver.repository.manager.ManagerRepository;
+import com.spoonsors.spoonsorsserver.service.ImageUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -14,11 +19,15 @@ import java.util.List;
 public class ManagerService {
 
     private final ManagerRepository managerRepository;
-
+    private final IManagerRepository iManagerRepository;
     //식재료 등록
-    public Long regist(Ingredients ingredient){
-        managerRepository.regist(ingredient);
-        return ingredient.getIngredients_id();
+    public Ingredients regist(IngredientsDto ingredientsDto, MultipartFile img) throws IOException {
+        Ingredients addIngredientItem = iManagerRepository.save(ingredientsDto.toEntity());
+
+        if(img!=null && !img.isEmpty()){
+            addIngredientItem.setIngredients_image(ImageUtils.compressImage(img.getBytes()));
+        }
+        return addIngredientItem;
     }
 
     // 식재료 전체 조회
