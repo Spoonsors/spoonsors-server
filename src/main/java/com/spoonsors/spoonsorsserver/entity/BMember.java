@@ -25,12 +25,15 @@ public class BMember {
     @Column( length = 100, nullable = false)
     private String bMember_nickname;
 
+    @JsonIgnore
     @Column( length = 100, nullable = false)
     private String bMember_phoneNumber;
 
+    @JsonIgnore
     @Column( length = 100, nullable = false)
     private String bMember_address;
 
+    @JsonIgnore
     @Column(nullable = false) //증명서 이미지
     private byte[] bMember_certificate;
 
