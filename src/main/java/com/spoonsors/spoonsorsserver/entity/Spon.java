@@ -31,7 +31,7 @@ public class Spon {
     @JoinColumn(name = "ingredients_id",nullable = false)
     private Ingredients ingredients;
 
-    @Temporal(value = TemporalType.DATE)
+    @Temporal(value = TemporalType.TIMESTAMP)
     private Date spon_date;
 
     @ColumnDefault("0")
