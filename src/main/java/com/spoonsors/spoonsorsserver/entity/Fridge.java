@@ -19,6 +19,7 @@ public class Fridge {
     @Column(nullable = false)
     private Long fridge_id;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id")
     private BMember bMember;

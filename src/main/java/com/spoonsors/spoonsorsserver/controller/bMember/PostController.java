@@ -35,4 +35,11 @@ public class PostController {
         Post post=postService.viewPost(postId);
         return post;
     }
+
+    //내가 작성한 글 보기
+    @GetMapping("/viewMyPosting/{bMemberId}")
+    public List<Post> viewMyPosts(@PathVariable String bMemberId){
+        List<Post> posts=postService.viewMyPosts(bMemberId);
+        return posts;
+    }
 }
