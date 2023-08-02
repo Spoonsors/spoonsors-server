@@ -22,6 +22,7 @@ import java.util.Optional;
 public class SponService {
 
     private final ManagerRepository managerRepository;
+    private final PostRepository postRepository;
     private final IPostRepository iPostRepository;
     private final ISponRepository iSponRepository;
     private final ISMemberRepository iSMemberRepository;
@@ -57,17 +58,24 @@ public class SponService {
         SMember sMember = optionalSMember.get();
 
        Date date = new Date();
-
+       Post post = spon.getPost();
        Spon spon2=Spon.builder()
                 .spon_id(spon.getSpon_id())
                 .spon_date(date)
                 .ingredients(spon.getIngredients())
                 .sMember(sMember)
-                .post(spon.getPost())
+                .post(post)
                 .spon_state(1)
                 .build();
 
        iSponRepository.save(spon2);
+
+       postRepository.changeRemain(post.getPost_id());
+       //자동으로 post상태 바꿔주는 코드
+       if(post.getRemain_spon()==0){ //더이상 남은 후원이 없으면 글 완료 처리
+           postRepository.changeState(post.getPost_id());
+       }
+
        return "후원 완료";
    }
 

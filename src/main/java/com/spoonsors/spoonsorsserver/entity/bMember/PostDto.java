@@ -28,6 +28,7 @@ public class PostDto {
                 .post_state(0)
                 .has_review(0)
                 .bMember(bMember)
+                .remain_spon(item_list.size())
                 .build();
     }
 }

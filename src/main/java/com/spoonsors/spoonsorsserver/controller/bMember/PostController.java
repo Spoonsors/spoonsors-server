@@ -17,6 +17,7 @@ public class PostController {
     private final PostService postService;
     private final SponService sponService;
 
+    //후원 글 작성
     @PostMapping("/bMember/post/{bMemberId}")
     public String writePost(@PathVariable String bMemberId, @RequestBody PostDto postDto){
         Post post=postService.writePost(bMemberId, postDto);
@@ -24,12 +25,14 @@ public class PostController {
         return "["+post.getPost_title()+"] 작성 완료";
     }
 
+    //후원 글 목록 확인
     @GetMapping("/viewPosting")
     public List<Post> viewAllPosts(){
         List<Post> posts=postService.viewAllPosts();
         return posts;
     }
 
+    //단일 글 확인
     @GetMapping("/viewPosting/{postId}")
     public Post viewPost(@PathVariable Long postId){
         Post post=postService.viewPost(postId);
@@ -41,5 +44,12 @@ public class PostController {
     public List<Post> viewMyPosts(@PathVariable String bMemberId){
         List<Post> posts=postService.viewMyPosts(bMemberId);
         return posts;
+    }
+
+    //글 상태 변경
+    @PostMapping("/bMember/changePostState/{postId}")
+    public String changePostState(@PathVariable Long postId){
+
+        return postService.changePostState(postId);
     }
 }

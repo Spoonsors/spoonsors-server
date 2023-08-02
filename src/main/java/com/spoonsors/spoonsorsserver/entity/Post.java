@@ -48,5 +48,7 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Spon> spon = new ArrayList<>();
 
+    @ColumnDefault("0")
+    private Integer remain_spon;
 
 }
