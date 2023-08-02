@@ -5,6 +5,7 @@ import com.spoonsors.spoonsorsserver.entity.Post;
 import com.spoonsors.spoonsorsserver.entity.bMember.PostDto;
 import com.spoonsors.spoonsorsserver.repository.IPostRepository;
 import com.spoonsors.spoonsorsserver.repository.IbMemberRepository;
+import com.spoonsors.spoonsorsserver.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class PostService {
     private final IPostRepository iPostRepository;
     private final IbMemberRepository ibMemberRepository;
+    private final PostRepository postRepository;
 
     //글 작성
     public Post writePost(String bMemberId, PostDto postDto){
@@ -48,5 +50,11 @@ public class PostService {
         Optional<BMember> optionalBMember =ibMemberRepository.findById(bMemberId);
         BMember bMember = optionalBMember.get();
         return bMember.getPosts();
+    }
+
+    //글 상태 변경
+    public String changePostState(Long post_id){
+        postRepository.changeState(post_id);
+        return "변경 완료";
     }
 }
