@@ -7,12 +7,14 @@ import java.util.Date;
 
 @ToString
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Review {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
     @Column(nullable = false)
     private Long review_id;
 
@@ -20,7 +22,7 @@ public class Review {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    @Column(nullable = false)
+    @Lob
     private byte[] review_img;
 
     @Column(length = 400)
