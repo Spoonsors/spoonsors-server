@@ -2,16 +2,21 @@ package com.spoonsors.spoonsorsserver.service.manager;
 
 import com.spoonsors.spoonsorsserver.entity.Ingredients;
 import com.spoonsors.spoonsorsserver.entity.manager.IngredientsDto;
-import com.spoonsors.spoonsorsserver.repository.manager.IManagerRepository;
-import com.spoonsors.spoonsorsserver.repository.manager.ManagerRepository;
+import com.spoonsors.spoonsorsserver.repository.IIngredientsRepository;
+import com.spoonsors.spoonsorsserver.repository.IManagerRepository;
+import com.spoonsors.spoonsorsserver.repository.ManagerRepository;
 import com.spoonsors.spoonsorsserver.service.ImageUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +25,8 @@ public class ManagerService {
 
     private final ManagerRepository managerRepository;
     private final IManagerRepository iManagerRepository;
+    private final IIngredientsRepository iIngredientsRepository;
+
     //식재료 등록
     public Ingredients regist(IngredientsDto ingredientsDto, MultipartFile img) throws IOException {
         Ingredients addIngredientItem = iManagerRepository.save(ingredientsDto.toEntity());
@@ -41,15 +48,23 @@ public class ManagerService {
     }
 
     //식재료 수정
-    public Long update(Ingredients ingredients){
+    public Ingredients update( Long ingredients_id,  IngredientsDto ingredientsDto, MultipartFile img){
 
-        Ingredients updateIngredient  = managerRepository.findById(ingredients.getIngredients_id());
-        updateIngredient.setIngredients_name(ingredients.getIngredients_name());
-        updateIngredient.setProduct_name(ingredients.getProduct_name());
-        updateIngredient.setIngredients_image(ingredients.getIngredients_image());
-        updateIngredient.setPrice(ingredients.getPrice());
+        Ingredients updateIngredient  = new Ingredients();
+        updateIngredient.setIngredients_id(ingredients_id);
+        updateIngredient.setIngredients_name(ingredientsDto.getIngredientsName());
+        updateIngredient.setProduct_name(ingredientsDto.getProductName());
+        updateIngredient.setPrice(ingredientsDto.getPrice());
 
-        return updateIngredient.getIngredients_id();
+        if(img!=null && !img.isEmpty()){
+            try {
+                updateIngredient.setIngredients_image(ImageUtils.compressImage(img.getBytes()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return iIngredientsRepository.save(updateIngredient);
     }
 
     // 식재료 삭제
