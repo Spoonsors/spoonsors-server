@@ -24,7 +24,6 @@ public class FridgeController {
     //아이템 추가
     @PostMapping(value = "bMember/fridge/add/{bMemberId}", consumes = {MediaType.APPLICATION_JSON_VALUE, "multipart/form-data"})
     public Fridge addFridgeItem(@PathVariable String bMemberId, @RequestPart FridgeDto fridgeDto, @RequestPart(value = "img", required = false) MultipartFile img){
-        log.info("멤버 아이디: {}", bMemberId);
         Fridge addedItem= null;
         try {
             addedItem = fridgeService.addFridgeItem(bMemberId, fridgeDto, img);

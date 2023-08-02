@@ -25,9 +25,9 @@ public class FridgeService {
     private final IFridgeRepository iFridgeRepository;
 
     public Fridge addFridgeItem(String bMemberId, FridgeDto fridgeDto, MultipartFile img) throws IOException {
-        log.info("멤버 아이디: {}", bMemberId);
         Optional<BMember> optionalBMember =ibMemberRepository.findById(bMemberId);
         BMember bMember = optionalBMember.get();
+
         Fridge addFridgeItem=iFridgeRepository.save(fridgeDto.toEntity());
         addFridgeItem.setBMember(bMember);
 

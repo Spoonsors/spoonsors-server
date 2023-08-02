@@ -25,7 +25,7 @@ public class Ingredients {
     @Column(length = 100)
     private String product_name;
 
-    @Column(nullable = false)
+    @Lob
     private byte[] ingredients_image;
 
     @Column(nullable = false)

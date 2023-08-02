@@ -43,10 +43,11 @@ public class ManagerController {
     }
 
     //식재로 수정
-    @PutMapping("/manager/update")
-    public String update(@RequestBody Ingredients ingredients){
-        Long ingredientId = managerService.update(ingredients);
-        return ingredientId + "번 식재료 수정 완료";
+    @PutMapping("/manager/update/{ingredients_id}")
+    public Ingredients update(@PathVariable Long ingredients_id, @RequestPart IngredientsDto ingredientsDto, @RequestPart(value = "img", required = false) MultipartFile img){
+        Ingredients ingredient = null;
+        ingredient = managerService.update(ingredients_id, ingredientsDto, img);
+        return ingredient;
     }
 
     //식재료 삭제
