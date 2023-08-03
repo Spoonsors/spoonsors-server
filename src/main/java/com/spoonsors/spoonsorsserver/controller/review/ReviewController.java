@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.PersistenceException;
 import java.io.IOException;
 import java.util.List;
 
@@ -32,15 +33,15 @@ public class ReviewController {
         return review;
     }
     // 내가 작성한 리뷰 확인
-    /*@GetMapping("/review/findMyReview/{post_id}")
-    public List<Review> findMyReview(@PathVariable Long post_id){
+    @GetMapping("/review/findMyReview/{bMemberId}")
+    public List<Review> findMyReview(@PathVariable String bMemberId){
         List<Review> myReview = null;
         try{
-            myReview = reviewService.findMyReview(post_id);
-        }catch (IOException e){
-            e.printStackTrace();
+            myReview = reviewService.findMyReview(bMemberId);
+        }catch (PersistenceException e){
+            e.getMessage();
         }
-        return List<myReview>;
+        return myReview;
     }
-    */
+
 }

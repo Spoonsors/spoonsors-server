@@ -1,5 +1,6 @@
 package com.spoonsors.spoonsorsserver.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,11 +15,12 @@ import java.util.Date;
 @Entity
 public class Review {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
     @Column(nullable = false)
     private Long review_id;
 
+    @JsonIgnore
     @OneToOne
+    @MapsId
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
