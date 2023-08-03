@@ -51,4 +51,9 @@ public class Post {
     @ColumnDefault("0")
     private Integer remain_spon;
 
+    @Lob
+    private String menu_img;
+
+    private String menu_name;
+
 }

@@ -1,7 +1,8 @@
 package com.spoonsors.spoonsorsserver.controller.bMember;
 
 import com.spoonsors.spoonsorsserver.entity.Post;
-import com.spoonsors.spoonsorsserver.entity.bMember.PostDto;
+import com.spoonsors.spoonsorsserver.entity.bMember.ViewPostDto;
+import com.spoonsors.spoonsorsserver.entity.bMember.WritePostDto;
 import com.spoonsors.spoonsorsserver.service.bMember.PostService;
 import com.spoonsors.spoonsorsserver.service.spon.SponService;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,9 @@ public class PostController {
 
     //후원 글 작성
     @PostMapping("/bMember/post/{bMemberId}")
-    public String writePost(@PathVariable String bMemberId, @RequestBody PostDto postDto){
-        Post post=postService.writePost(bMemberId, postDto);
-        sponService.addSpon(postDto.getItem_list(), post.getPost_id());
+    public String writePost(@PathVariable String bMemberId, @RequestBody WritePostDto writePostDto){
+        Post post=postService.writePost(bMemberId, writePostDto);
+        sponService.addSpon(writePostDto.getItem_list(), post.getPost_id());
         return "["+post.getPost_title()+"] 작성 완료";
     }
 
@@ -34,8 +35,8 @@ public class PostController {
 
     //단일 글 확인
     @GetMapping("/viewPosting/{postId}")
-    public Post viewPost(@PathVariable Long postId){
-        Post post=postService.viewPost(postId);
+    public ViewPostDto viewPost(@PathVariable Long postId){
+        ViewPostDto post=postService.viewPost(postId);
         return post;
     }
 

@@ -12,12 +12,14 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PostDto {
+public class WritePostDto {
     private String post_title;
     private String post_txt;
     private Date post_date;
     private BMember bMember;
     private List<String> item_list;
+    private String menu_img;
+    private String menu_name;
 
     public Post toEntity(){
         return Post.builder()
@@ -29,6 +31,8 @@ public class PostDto {
                 .has_review(0)
                 .bMember(bMember)
                 .remain_spon(item_list.size())
+                .menu_img(menu_img)
+                .menu_name(menu_name)
                 .build();
     }
 }

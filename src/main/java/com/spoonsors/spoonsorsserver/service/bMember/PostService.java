@@ -2,8 +2,11 @@ package com.spoonsors.spoonsorsserver.service.bMember;
 
 import com.spoonsors.spoonsorsserver.entity.BMember;
 import com.spoonsors.spoonsorsserver.entity.Post;
-import com.spoonsors.spoonsorsserver.entity.bMember.PostDto;
+import com.spoonsors.spoonsorsserver.entity.Review;
+import com.spoonsors.spoonsorsserver.entity.bMember.ViewPostDto;
+import com.spoonsors.spoonsorsserver.entity.bMember.WritePostDto;
 import com.spoonsors.spoonsorsserver.repository.IPostRepository;
+import com.spoonsors.spoonsorsserver.repository.IReviewRepository;
 import com.spoonsors.spoonsorsserver.repository.IbMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +24,15 @@ import java.util.Optional;
 public class PostService {
     private final IPostRepository iPostRepository;
     private final IbMemberRepository ibMemberRepository;
+    private final IReviewRepository iReviewRepository;
     private final PostRepository postRepository;
 
     //글 작성
-    public Post writePost(String bMemberId, PostDto postDto){
+    public Post writePost(String bMemberId, WritePostDto writePostDto){
         Optional<BMember> optionalBMember =ibMemberRepository.findById(bMemberId);
         BMember bMember = optionalBMember.get();
-        postDto.setBMember(bMember);
-        Post post=iPostRepository.save(postDto.toEntity());
+        writePostDto.setBMember(bMember);
+        Post post=iPostRepository.save(writePostDto.toEntity());
         return post;
     }
 
@@ -39,10 +43,20 @@ public class PostService {
     }
 
     //단일 글 조회
-    public Post viewPost(Long postId){
+    public ViewPostDto viewPost(Long postId){
         Optional<Post> optionalPost=iPostRepository.findById(postId);
         Post post=optionalPost.get();
-        return post;
+        ViewPostDto viewPostDto = new ViewPostDto();
+        viewPostDto.setPost(post);
+//        Optional<Review> optionalReview=iReviewRepository.findById(post.getPost_id());
+//        Review review = optionalReview.get();
+//        viewPostDto.setReview(review);
+        if(post.getHas_review()==1){
+            Optional<Review> optionalReview=iReviewRepository.findById(post.getPost_id());
+            Review review = optionalReview.get();
+            viewPostDto.setReview(review);
+        }
+        return viewPostDto;
     }
 
     //내가 작성한 글 보기
