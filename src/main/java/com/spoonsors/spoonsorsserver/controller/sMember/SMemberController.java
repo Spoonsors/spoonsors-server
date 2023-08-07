@@ -19,6 +19,7 @@ public class SMemberController {
     @PostMapping("/join/sMember")
     public String join(@RequestBody SMemberSignUpDto dto) throws Exception{
         String id=sMemberService.signUp(dto);
+
         return id+" 회원가입 완료";
     }
 

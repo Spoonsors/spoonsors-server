@@ -2,7 +2,6 @@ package com.spoonsors.spoonsorsserver.repository;
 
 import com.spoonsors.spoonsorsserver.entity.BMember;
 import com.spoonsors.spoonsorsserver.entity.Fridge;
-import com.spoonsors.spoonsorsserver.entity.Ingredients;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

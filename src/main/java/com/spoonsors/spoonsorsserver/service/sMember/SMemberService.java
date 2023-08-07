@@ -1,6 +1,5 @@
 package com.spoonsors.spoonsorsserver.service.sMember;
 
-import com.spoonsors.spoonsorsserver.entity.BMember;
 import com.spoonsors.spoonsorsserver.entity.SMember;
 import com.spoonsors.spoonsorsserver.entity.sMember.SMemberSignUpDto;
 import com.spoonsors.spoonsorsserver.loginInfra.JwtTokenProvider;
@@ -9,6 +8,7 @@ import com.spoonsors.spoonsorsserver.repository.ISMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.IbMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.SMemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,39 +17,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
+@Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class SMemberService {
 
     private final ISMemberRepository isMemberRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    private final JwtTokenProvider jwtTokenProvider;
-    private final PasswordEncoder encoder;
-
     private final IbMemberRepository ibMemberRepository;
     private final BMemberRepository bMemberRepository;
     private final SMemberRepository sMemberRepository;
-
-
-
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordEncoder encoder;
     public String signUp(SMemberSignUpDto requestDto) throws Exception {
 
-        if (isMemberRepository.findById(requestDto.getSMember_id()).isPresent()){
+        if (isMemberRepository.findById(requestDto.getId()).isPresent()){
             throw new Exception("이미 존재하는 아이디입니다.");
         }
-        if (ibMemberRepository.findByEmail(requestDto.getSMember_id()).isPresent()){
+        if (ibMemberRepository.findById(requestDto.getId()).isPresent()){
             throw new Exception("이미 존재하는 아이디입니다.");
         }
-        if (bMemberRepository.findByNickname(requestDto.getSMember_nickname()).isEmpty()){
+        if (bMemberRepository.findByNickname(requestDto.getNickname()).isEmpty()){
             throw new Exception("이미 존재하는 닉네임입니다.");
         }
-        if (sMemberRepository.findByNickname(requestDto.getSMember_nickname()).isEmpty()){
+        if (sMemberRepository.findByNickname(requestDto.getNickname()).isEmpty()){
             throw new Exception("이미 존재하는 닉네임입니다.");
         }
-        if (!requestDto.getSMember_pwd().equals(requestDto.getSMember_pwd_check())){
+        if (!requestDto.getPwd().equals(requestDto.getPwd_check())){
             throw new Exception("비밀번호가 일치하지 않습니다.");
         }
 
