@@ -1,8 +1,6 @@
 package com.spoonsors.spoonsorsserver.repository;
 
-import com.spoonsors.spoonsorsserver.entity.BMember;
-import com.spoonsors.spoonsorsserver.entity.Fridge;
-import com.spoonsors.spoonsorsserver.entity.Ingredients;
+import com.spoonsors.spoonsorsserver.entity.SMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -11,11 +9,12 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class BMemberRepository {
+public class SMemberRepository {
+
     private final EntityManager em;
 
-    public Optional<BMember> findByNickname(String nickname) {
-        return em.createQuery("SELECT b FROM BMember b WHERE b.bMember_nickname = :nickname", BMember.class)
+    public Optional<SMember> findByNickname(String nickname) {
+        return em.createQuery("SELECT s FROM SMember s WHERE s.sMember_nickname = :nickname", SMember.class)
                 .setParameter("nickname", nickname)
                 .getResultList().stream().findAny();
     }
