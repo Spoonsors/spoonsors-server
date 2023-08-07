@@ -2,6 +2,7 @@ package com.spoonsors.spoonsorsserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class BMember {
+public class BMember extends BaseTime{
     @Id
     @Column(length = 100, nullable = false)
     private String bMember_id;
@@ -39,5 +40,12 @@ public class BMember {
 
     @OneToMany(mappedBy = "bMember")
     private List<Post> posts = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public void encodePassword(PasswordEncoder passwordEncoder){
+        this.bMember_pwd = passwordEncoder.encode(bMember_pwd);
+    }
 
 }
