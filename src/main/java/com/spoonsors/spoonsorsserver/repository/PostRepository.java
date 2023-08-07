@@ -21,4 +21,9 @@ public class PostRepository {
         Post post = em.find(Post.class, post_id);
         post.setPost_state(1);
     }
+
+    public void changeReviewState(Long post_id){
+        Post post = em.find(Post.class, post_id);
+        post.setHas_review(1);
+    }
 }
