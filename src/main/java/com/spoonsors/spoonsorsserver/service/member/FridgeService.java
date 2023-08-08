@@ -1,4 +1,4 @@
-package com.spoonsors.spoonsorsserver.service.bMember;
+package com.spoonsors.spoonsorsserver.service.member;
 
 import com.spoonsors.spoonsorsserver.entity.BMember;
 import com.spoonsors.spoonsorsserver.entity.Fridge;

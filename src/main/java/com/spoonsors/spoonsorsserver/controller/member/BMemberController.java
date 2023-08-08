@@ -1,7 +1,7 @@
-package com.spoonsors.spoonsorsserver.controller.bMember;
+package com.spoonsors.spoonsorsserver.controller.member;
 
 import com.spoonsors.spoonsorsserver.entity.bMember.BMemberSignUpDto;
-import com.spoonsors.spoonsorsserver.service.bMember.BMemberService;
+import com.spoonsors.spoonsorsserver.service.member.BMemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;

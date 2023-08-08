@@ -1,8 +1,8 @@
-package com.spoonsors.spoonsorsserver.controller.bMember;
+package com.spoonsors.spoonsorsserver.controller.member;
 
 import com.spoonsors.spoonsorsserver.entity.Fridge;
 import com.spoonsors.spoonsorsserver.entity.bMember.FridgeDto;
-import com.spoonsors.spoonsorsserver.service.bMember.FridgeService;
+import com.spoonsors.spoonsorsserver.service.member.FridgeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
