@@ -1,9 +1,9 @@
-package com.spoonsors.spoonsorsserver.controller.bMember;
+package com.spoonsors.spoonsorsserver.controller.member;
 
 import com.spoonsors.spoonsorsserver.entity.Post;
 import com.spoonsors.spoonsorsserver.entity.bMember.ViewPostDto;
 import com.spoonsors.spoonsorsserver.entity.bMember.WritePostDto;
-import com.spoonsors.spoonsorsserver.service.bMember.PostService;
+import com.spoonsors.spoonsorsserver.service.member.PostService;
 import com.spoonsors.spoonsorsserver.service.spon.SponService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
