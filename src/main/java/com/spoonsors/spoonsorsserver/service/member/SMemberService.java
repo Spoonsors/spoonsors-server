@@ -38,10 +38,10 @@ public class SMemberService {
         if (ibMemberRepository.findById(requestDto.getId()).isPresent()){
             throw new Exception("이미 존재하는 아이디입니다.");
         }
-        if (bMemberRepository.findByNickname(requestDto.getNickname()).isEmpty()){
+        if (bMemberRepository.findByNickname(requestDto.getNickname()).isPresent()){
             throw new Exception("이미 존재하는 닉네임입니다.");
         }
-        if (sMemberRepository.findByNickname(requestDto.getNickname()).isEmpty()){
+        if (sMemberRepository.findByNickname(requestDto.getNickname()).isPresent()){
             throw new Exception("이미 존재하는 닉네임입니다.");
         }
         if (!requestDto.getPwd().equals(requestDto.getPwd_check())){
