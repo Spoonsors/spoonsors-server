@@ -41,6 +41,7 @@ public class MealPlannerService {
         updateMealPlanner.setCarbohydrate(mealPlanner.getCarbohydrate());
         updateMealPlanner.setProtein(mealPlanner.getProtein());
         updateMealPlanner.setFat(mealPlanner.getFat());
+        updateMealPlanner.setNa(mealPlanner.getNa());
         updateMealPlanner.setLevel(mealPlanner.getLevel());
         updateMealPlanner.setTimeRequired(mealPlanner.getTimeRequired());
 

@@ -43,14 +43,14 @@ public class MealPlanner {
     @Column(length = 100, nullable = false)
     private String mealPlanner_name;
 
-    private Integer kcal;
+    private Float kcal;
 
-    private Integer carbohydrate;
+    private Float carbohydrate;
 
-    private Integer protein;
+    private Float protein;
 
-    private Integer fat;
-
+    private Float fat;
+    private Float na;
     @Column(length = 10)
     private String level;
 
