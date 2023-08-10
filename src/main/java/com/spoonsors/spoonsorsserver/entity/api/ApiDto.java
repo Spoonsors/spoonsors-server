@@ -34,16 +34,16 @@ public class ApiDto {
     private List<String> MANUAL_IMG = new ArrayList<>();
 
     //열량
-    private Float INFO_ENG;
+    private Integer INFO_ENG;
 
     //탄수화물
-    private Float INFO_CAR;
+    private Integer INFO_CAR;
     //단백질
-    private Float INFO_PRO;
+    private Integer INFO_PRO;
     //지방
-    private Float INFO_FAT;
+    private Integer INFO_FAT;
     //나트륨
-    private Float INFO_NA;
+    private Integer INFO_NA;
 
     //재료정보
     private String RCP_PARTS_DTLS;
