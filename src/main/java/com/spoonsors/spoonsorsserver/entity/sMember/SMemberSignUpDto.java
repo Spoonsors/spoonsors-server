@@ -4,6 +4,7 @@ import com.spoonsors.spoonsorsserver.entity.Role;
 import com.spoonsors.spoonsorsserver.entity.SMember;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -24,6 +25,9 @@ public class SMemberSignUpDto {
     @Size(min=2, message = "2글자 이상으로 입력해주세요.")
     private String nickname;
 
+    @NotBlank(message = "이름을 입력해주세요.")
+    private String name;
+
     private String phoneNumber;
 
 
@@ -32,6 +36,7 @@ public class SMemberSignUpDto {
         return SMember.builder()
                 .sMember_id(id)
                 .sMember_pwd(pwd)
+                .sMember_name(name)
                 .sMember_nickname(nickname)
                 .sMember_phoneNumber(phoneNumber)
                 .role(Role.SMEMBER)

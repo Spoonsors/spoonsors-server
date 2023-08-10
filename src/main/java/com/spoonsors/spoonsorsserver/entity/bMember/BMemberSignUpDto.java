@@ -22,6 +22,9 @@ public class BMemberSignUpDto {
 
     private String pwd_check;
 
+    @NotBlank(message = "이름을 입력해주세요.")
+    private String name;
+
     @NotBlank(message = "닉네임을 입력해주세요.")
     @Size(min=2, message = "2글자 이상으로 입력해주세요.")
     private String nickname;
@@ -39,6 +42,7 @@ public class BMemberSignUpDto {
         return BMember.builder()
                 .bMember_id(id)
                 .bMember_pwd(pwd)
+                .bMember_name(name)
                 .bMember_nickname(nickname)
                 .bMember_phoneNumber(phoneNumber)
                 .bMember_address(address)
