@@ -14,6 +14,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(
+        name="bmember",
+        uniqueConstraints={
+                @UniqueConstraint(
+                        name="phoneAndName",
+                        columnNames={"bMember_name", "bMember_phoneNumber"}
+                )
+        }
+)
 public class BMember extends BaseTime{
     @Id
     @Column(length = 100, nullable = false)
@@ -23,11 +32,14 @@ public class BMember extends BaseTime{
     @Column( length = 100, nullable = false)
     private String bMember_pwd;
 
-    @Column( length = 100, nullable = false)
+    @Column( length = 100, nullable = false,unique=true)
     private String bMember_nickname;
 
-    @JsonIgnore
     @Column( length = 100, nullable = false)
+    private String bMember_name;
+
+    @JsonIgnore
+    @Column( length = 100, nullable = false, unique=true)
     private String bMember_phoneNumber;
 
     @JsonIgnore
