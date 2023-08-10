@@ -98,11 +98,11 @@ public class ApiService {
                 apiDto.setATT_FILE_NO_MAIN(jo.get("ATT_FILE_NO_MAIN").toString());
                 apiDto.setATT_FILE_NO_MK(jo.get("ATT_FILE_NO_MK").toString());
                 apiDto.setRCP_PAT2(jo.get("RCP_PAT2").toString());
-                apiDto.setINFO_ENG(Integer.parseInt(jo.get("INFO_ENG").toString()));
-                apiDto.setINFO_CAR(Integer.parseInt(jo.get("INFO_CAR").toString()));
-                apiDto.setINFO_PRO(Integer.parseInt(jo.get("INFO_PRO").toString()));
-                apiDto.setINFO_FAT(Integer.parseInt(jo.get("INFO_FAT").toString()));
-                apiDto.setINFO_NA(Integer.parseInt(jo.get("INFO_NA").toString()));
+                apiDto.setINFO_ENG(Float.parseFloat(jo.get("INFO_ENG").toString()));
+                apiDto.setINFO_CAR(Float.parseFloat(jo.get("INFO_CAR").toString()));
+                apiDto.setINFO_PRO(Float.parseFloat(jo.get("INFO_PRO").toString()));
+                apiDto.setINFO_FAT(Float.parseFloat(jo.get("INFO_FAT").toString()));
+                apiDto.setINFO_NA(Float.parseFloat(jo.get("INFO_NA").toString()));
                 apiDto.setRCP_PARTS_DTLS(jo.get("RCP_PARTS_DTLS").toString());
                 List<String> MANUAL_List = new ArrayList<>();
                 List<String> MANUAL_IMG_List = new ArrayList<>();
