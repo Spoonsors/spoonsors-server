@@ -27,7 +27,7 @@ public class FCMService {
     private final ISMemberRepository isMemberRepository;
     private final ISponRepository iSponRepository;
     private final IPostRepository iPostRepository;
-    private final String API_URL = "https://fcm.googleapis.com/v1/projects/android-****/messages:send"; //todo API URL수정
+    private final String API_URL = "https://fcm.googleapis.com/v1/projects/spoonsors/messages:send";
     private final ObjectMapper objectMapper;
 
     public Long sendMessageTo(String targetToken, String targetId, Long postOrSponId, String state) throws IOException {
