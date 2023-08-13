@@ -20,6 +20,13 @@ public class SMemberRepository {
                 .getResultList().stream().findAny();
     }
 
+    public Optional<SMember> findId(String name, String phoneNum){
+        return em.createQuery("SELECT s FROM SMember s WHERE s.sMember_name = :name and s.sMember_phoneNumber= : phoneNum", SMember.class)
+                .setParameter("name",name)
+                .setParameter("phoneNum", phoneNum)
+                .getResultList().stream().findAny();
+    }
+
     public void putToken(Map<String, String> token){
         SMember sMember = em.find(SMember.class, token.get("id"));
         sMember.setToken(token.get("token"));
