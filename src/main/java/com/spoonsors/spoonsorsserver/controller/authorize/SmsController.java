@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.spoonsors.spoonsorsserver.entity.authorize.MessageDto;
 import com.spoonsors.spoonsorsserver.entity.authorize.SmsResponseDto;
 import com.spoonsors.spoonsorsserver.service.authorize.SmsService;
+import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,14 +26,25 @@ import java.security.NoSuchAlgorithmException;
 public class SmsController {
     private final SmsService smsService;
 
-    @PostMapping("/sms/send/{memberId}")
-    public SmsResponseDto sendSms(HttpServletRequest request,@PathVariable String memberId, @RequestBody MessageDto messageDto) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+    @PostMapping("/sms/send")
+    public SmsResponseDto sendSms(HttpServletRequest request, @RequestBody MessageDto messageDto) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
 
-        SmsResponseDto responseDto = smsService.sendSms(request,memberId,messageDto);
-        HttpSession session = request.getSession();
-        log.info("session main ={}",session.getAttribute("id"));
-        log.info("session main ={}",session.getAttribute("token"));
+        SmsResponseDto responseDto = smsService.sendSms(request, messageDto);
 
         return responseDto;
+    }
+
+    @PostMapping("/sms/verify")
+    public String verifySms(HttpServletRequest request,@RequestBody Map<String,String> verification) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+        String verfication;
+
+        verfication = smsService.verifySms(request.getSession(),verification.get("phoneNum"), verification.get("code"));
+
+        if(verfication == null) {
+            return "인증번호가 맞지 않습니다.";
+        }else{
+            request.getSession().invalidate();
+            return verfication;
+        }
     }
 }
