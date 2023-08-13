@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -17,5 +18,10 @@ public class SMemberRepository {
         return em.createQuery("SELECT s FROM SMember s WHERE s.sMember_nickname = :nickname", SMember.class)
                 .setParameter("nickname", nickname)
                 .getResultList().stream().findAny();
+    }
+
+    public void putToken(Map<String, String> token){
+        SMember sMember = em.find(SMember.class, token.get("id"));
+        sMember.setToken(token.get("token"));
     }
 }

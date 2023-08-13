@@ -75,4 +75,8 @@ public class BMemberService {
 
         return jwtTokenProvider.createToken(bMember.getBMember_id(), roles);
     }
+
+    public void putToken(Map<String, String> token){
+        bMemberRepository.putToken(token);
+    }
 }

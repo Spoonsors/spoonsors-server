@@ -74,4 +74,8 @@ public class SMemberService {
 
         return jwtTokenProvider.createToken(sMember.getSMember_id(), roles);
     }
+
+    public void putToken(Map<String, String> token){
+        sMemberRepository.putToken(token);
+    }
 }

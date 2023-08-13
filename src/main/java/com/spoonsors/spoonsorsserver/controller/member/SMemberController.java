@@ -27,4 +27,10 @@ public class SMemberController {
     public String login(@RequestBody Map<String, String> member) {
         return sMemberService.login(member);
     }
+
+    @PostMapping("/sMember/putToken")
+    public String putToken(@RequestBody Map<String, String> token){
+        sMemberService.putToken(token);
+        return "완료";
+    }
 }
