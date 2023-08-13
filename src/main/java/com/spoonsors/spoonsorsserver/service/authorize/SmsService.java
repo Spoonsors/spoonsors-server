@@ -54,8 +54,8 @@ public class SmsService {
     @Value("${naver-cloud-sms.senderPhone}")
     private String phone;
 
-    public SmsResponseDto sendSms(HttpServletRequest requests,String memberId,MessageDto messageDto) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
-        String smsConfirmNum = createSmsKey(requests,memberId);
+    public SmsResponseDto sendSms(HttpServletRequest requests,MessageDto messageDto) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
+        String smsConfirmNum = createSmsKey(requests,messageDto.getTo());
         // 현재시간
         String time = Long.toString(System.currentTimeMillis());
 
@@ -128,7 +128,7 @@ public class SmsService {
     }
 
     // 5자리의 난수를 조합을 통해 인증코드 만들기
-    public static String createSmsKey(HttpServletRequest request, String memberId) {
+    public static String createSmsKey(HttpServletRequest request, String phoneNum) {
         HttpSession session = request.getSession();
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
@@ -136,15 +136,17 @@ public class SmsService {
         for (int i = 0; i < 5; i++) { // 인증코드 5자리
             key.append((rnd.nextInt(10)));
         }
-        log.info("memberId={}",memberId);
-        log.info("token={}",key);
 
-
-        session.setAttribute("id", memberId);
-        session.setAttribute("token", key);
-        log.info("session 2 ={}",request.getAttribute("id"));
-        log.info("session 2 ={}",request.getAttribute("token"));
-
+        session.setAttribute(phoneNum, key);
         return key.toString();
+    }
+    public boolean isValidToken(HttpSession session,String phoneNum,String verificationCode){
+        return (session.getAttribute(phoneNum).toString()).equals(verificationCode);
+    }
+    public String verifySms(HttpSession session, String phoneNum,String verificationCode){
+        if(!isValidToken(session,phoneNum,verificationCode)){
+            return null;
+        }
+        return "인증완료 되었습니다.";
     }
 }
