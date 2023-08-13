@@ -1,19 +1,28 @@
 package com.spoonsors.spoonsorsserver.service.member;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spoonsors.spoonsorsserver.controller.authorize.SmsController;
+import com.spoonsors.spoonsorsserver.entity.authorize.MessageDto;
 import com.spoonsors.spoonsorsserver.loginInfra.JwtTokenProvider;
 import com.spoonsors.spoonsorsserver.repository.BMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.ISMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.IbMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.SMemberRepository;
+import com.spoonsors.spoonsorsserver.service.authorize.SmsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,11 +38,13 @@ public class JoinService {
     private final SMemberRepository sMemberRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final SmsController smsController;
+
     public String checkId(String id) {
-        if (ibMemberRepository.findById(id).isPresent()){
+        if (ibMemberRepository.findById(id).isPresent()) {
             return "이미 존재하는 아이디입니다.";
         }
-        if (isMemberRepository.findById(id).isPresent()){
+        if (isMemberRepository.findById(id).isPresent()) {
             return "이미 존재하는 아이디입니다.";
         }
 
@@ -42,10 +53,10 @@ public class JoinService {
 
     public String checkNickname(String nickname) {
 
-        if (bMemberRepository.findByNickname(nickname).isPresent()){
+        if (bMemberRepository.findByNickname(nickname).isPresent()) {
             return "이미 존재하는 닉네임입니다.";
         }
-        if (sMemberRepository.findByNickname(nickname).isPresent()){
+        if (sMemberRepository.findByNickname(nickname).isPresent()) {
             return "이미 존재하는 닉네임입니다.";
         }
         return "사용 가능한 닉네임입니다.";
@@ -154,22 +165,46 @@ public class JoinService {
         return userInfo;
     }
 
-    public String loginOrJoin(HashMap<String, String> info){
-        String id=info.get("email");
+    public String loginOrJoin(HashMap<String, String> info) {
+        String id = info.get("email");
 
-        if (ibMemberRepository.findById(id).isPresent()){
+        if (ibMemberRepository.findById(id).isPresent()) {
             List<String> roles = new ArrayList<>();
             roles.add("BMEMBER");
 
             return jwtTokenProvider.createToken(id, roles);
-        }
-        else if (isMemberRepository.findById(id).isPresent()){
+        } else if (isMemberRepository.findById(id).isPresent()) {
             List<String> roles = new ArrayList<>();
             roles.add("SMEMBER");
 
             return jwtTokenProvider.createToken(id, roles);
-        }else{
-            return "회원가입이 필요합니다."+ info;
+        } else {
+            return "회원가입이 필요합니다." + info;
         }
     }
+
+    public String findId(HttpServletRequest request, String name, String phoneNum) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+        {
+            if (bMemberRepository.findId(name, phoneNum).isPresent()) {
+                MessageDto messageDto = new MessageDto(phoneNum);
+                smsController.sendSms(request, messageDto);
+                return "사용자 확인 완료";
+            }
+            if (sMemberRepository.findId(name, phoneNum).isPresent()) {
+                MessageDto messageDto = new MessageDto(phoneNum);
+                smsController.sendSms(request, messageDto);
+                return "사용자 확인 완료";
+            }
+            return "이름과 번호가 일치하는 아이디가 없습니다.";
+        }
+    }
+    public String verifyFindId(String name, String phoneNum) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+        {
+            if (bMemberRepository.findId(name, phoneNum).isPresent()) {
+                return bMemberRepository.findId(name, phoneNum).get().getBMember_id();
+            }else
+                return sMemberRepository.findId(name, phoneNum).get().getSMember_id();
+            }
+        }
 }
+
