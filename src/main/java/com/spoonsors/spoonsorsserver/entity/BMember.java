@@ -2,6 +2,7 @@ package com.spoonsors.spoonsorsserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @ToString
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -55,6 +57,11 @@ public class BMember extends BaseTime{
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    private String token;
+
+    @ColumnDefault("0")
+    private int is_verified; //초기 0, 증명 완료 1
 
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.bMember_pwd = passwordEncoder.encode(bMember_pwd);

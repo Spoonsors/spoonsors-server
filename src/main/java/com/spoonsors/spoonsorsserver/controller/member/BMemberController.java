@@ -27,4 +27,10 @@ public class BMemberController {
     public String login(@RequestBody Map<String, String> member) {
         return bMemberService.login(member);
     }
+
+    @PostMapping("/bMember/putToken")
+    public String putToken(@RequestBody Map<String, String> token){
+        bMemberService.putToken(token);
+        return "완료";
+    }
 }

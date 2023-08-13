@@ -49,6 +49,8 @@ public class SMember extends BaseTime {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private String token;
+
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.sMember_pwd = passwordEncoder.encode(sMember_pwd);
     }

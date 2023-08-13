@@ -36,6 +36,8 @@ public class BMemberSignUpDto {
 
     private byte[] certificate;
 
+    private String token;
+
 
     @Builder
     public BMember toEntity(){
@@ -48,6 +50,8 @@ public class BMemberSignUpDto {
                 .bMember_address(address)
                 .bMember_certificate(certificate)
                 .role(Role.BMEMBER)
+                .token(token)
+                .is_verified(0)
                 .build();
     }
 }
