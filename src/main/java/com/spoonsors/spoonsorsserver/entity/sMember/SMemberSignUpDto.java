@@ -30,6 +30,7 @@ public class SMemberSignUpDto {
 
     private String phoneNumber;
 
+    private String token;
 
     @Builder
     public SMember toEntity(){
@@ -40,6 +41,7 @@ public class SMemberSignUpDto {
                 .sMember_nickname(nickname)
                 .sMember_phoneNumber(phoneNumber)
                 .role(Role.SMEMBER)
+                .token(token)
                 .build();
     }
 }
