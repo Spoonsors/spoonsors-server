@@ -52,9 +52,11 @@ public class BMember extends BaseTime{
     @Column(nullable = false) //증명서 이미지
     private byte[] bMember_certificate;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "bMember")
     private List<Post> posts = new ArrayList<>();
 
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     private Role role;
 

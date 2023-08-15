@@ -22,8 +22,6 @@ public class BMemberRepository {
     }
 
     public Optional<BMember> findId(String name, String phoneNum){
-        log.info("name={}",name);
-        log.info("phoneNum={}",phoneNum);
         return em.createQuery("SELECT b FROM BMember b WHERE b.bMember_name = :name and b.bMember_phoneNumber= : phoneNum", BMember.class)
                 .setParameter("name",name)
                 .setParameter("phoneNum", phoneNum)

@@ -1,8 +1,6 @@
 package com.spoonsors.spoonsorsserver.service.member;
 
-import com.spoonsors.spoonsorsserver.entity.BMember;
-import com.spoonsors.spoonsorsserver.entity.Post;
-import com.spoonsors.spoonsorsserver.entity.Review;
+import com.spoonsors.spoonsorsserver.entity.*;
 import com.spoonsors.spoonsorsserver.entity.bMember.ViewPostDto;
 import com.spoonsors.spoonsorsserver.entity.bMember.WritePostDto;
 import com.spoonsors.spoonsorsserver.repository.IPostRepository;
@@ -48,9 +46,6 @@ public class PostService {
         Post post=optionalPost.get();
         ViewPostDto viewPostDto = new ViewPostDto();
         viewPostDto.setPost(post);
-//        Optional<Review> optionalReview=iReviewRepository.findById(post.getPost_id());
-//        Review review = optionalReview.get();
-//        viewPostDto.setReview(review);
         if(post.getHas_review()==1){
             Optional<Review> optionalReview=iReviewRepository.findById(post.getPost_id());
             Review review = optionalReview.get();
