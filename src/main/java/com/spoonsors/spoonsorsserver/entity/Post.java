@@ -24,7 +24,7 @@ public class Post {
     @Column(nullable = false)
     private Long post_id;
 
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne
     @JoinColumn(name = "writer_id", nullable = false)
     private BMember bMember;
