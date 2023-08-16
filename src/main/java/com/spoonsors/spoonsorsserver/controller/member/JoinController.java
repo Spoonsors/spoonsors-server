@@ -44,13 +44,13 @@ public class JoinController {
 
         return joinService.loginOrJoin(info);
     }
-    // 아이디 찾기
-    @PostMapping("/join/findId")
+    // 아이디 찾기(이름 번호 match)
+    @PostMapping("/join/matchId")
     public String findId(HttpServletRequest request, @RequestBody Map<String,String> find) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
         return joinService.findId(request, find.get("name"),find.get("phoneNum"));
     }
     //아이디 찾기 인증확인
-    @PostMapping("/join/verify")
+    @PostMapping("/join/findId")
     public String verifyFindId(HttpServletRequest request,@RequestBody Map<String,String> verification) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
         String verify;
         verify = smsService.verifySms(request.getSession(),verification.get("phoneNum"), verification.get("code"));
@@ -60,6 +60,38 @@ public class JoinController {
             verify = joinService.verifyFindId(verification.get("name"),verification.get("phoneNum"));
             request.getSession().invalidate();
             return verify;
+        }
+    }
+    // 비밀번호 변경(아이디 존재 확인)
+    @GetMapping("/join/matchId/{memberId}")
+    public String matchId(@PathVariable String memberId){ return joinService.matchId(memberId);}
+    // 비밀번호 변경(문자인증(아이디, 이름, 폰 번호 일치해야함))
+    @PostMapping("/join/matchPwd")
+    public String authorizePwd(HttpServletRequest request, @RequestBody Map<String,String> find) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+        return joinService.authorizePwd(request,find.get("id"), find.get("name"),find.get("phoneNum"));
+    }
+    // 비밀번호 변경(인증 확인)
+    @PostMapping("/join/verifyPwd")
+    public String verifyPwd(HttpServletRequest request,@RequestBody Map<String,String> verification){
+        String verify;
+        verify = smsService.verifySms(request.getSession(),verification.get("phoneNum"), verification.get("code"));
+        if(verify == null) {
+            return "인증번호가 맞지 않습니다.";
+        }else{
+            verify = "인증완료 되었습니다.";
+            request.getSession().invalidate();
+            return verify;
+        }
+    }
+    // 비밀번호 변경(변경)
+    @PostMapping("/join/changePwd")
+    public String changePwd(@RequestBody Map<String,String> verification){
+        String result;
+        result = joinService.changePwd(verification);
+        if(result == null){
+            return "비밀번호 변경 실패";
+        }else {
+            return result;
         }
     }
 }
