@@ -59,11 +59,9 @@ public class BMemberService {
 
 
     public LoginDto login(Map<String, String> members) {
-        log.info("members.get(\"id\")={}",members.get("id"));
         BMember bMember = ibMemberRepository.findById(members.get("id"))
                 .filter(it -> encoder.matches(members.get("pwd"), it.getBMember_pwd()))   // 암호화된 비밀번호와 비교하도록 수정
                 .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 일치하지 않습니다."));
-        log.info("members.get(\"pwd\")={}",members.get("pwd"));
 
         List<String> roles = new ArrayList<>();
         roles.add(bMember.getRole().name());

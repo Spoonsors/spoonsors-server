@@ -12,6 +12,7 @@ import com.spoonsors.spoonsorsserver.repository.IbMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.SMemberRepository;
 import com.spoonsors.spoonsorsserver.service.authorize.SmsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +40,7 @@ public class JoinService {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final SmsController smsController;
-
+    private final PasswordEncoder passwordEncoder;
     public String checkId(String id) {
         if (ibMemberRepository.findById(id).isPresent()) {
             return "이미 존재하는 아이디입니다.";
@@ -198,7 +199,24 @@ public class JoinService {
             return "이름과 번호가 일치하는 아이디가 없습니다.";
         }
     }
-    public String verifyFindId(String name, String phoneNum) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+
+    public String authorizePwd(HttpServletRequest request, String id, String name, String phoneNum) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+        {
+            if (bMemberRepository.findPwd(id, name, phoneNum).isPresent()) {
+                MessageDto messageDto = new MessageDto(phoneNum);
+                smsController.sendSms(request, messageDto);
+                return "사용자 확인 완료";
+            }
+            if (sMemberRepository.findPwd(id, name, phoneNum).isPresent()) {
+                MessageDto messageDto = new MessageDto(phoneNum);
+                smsController.sendSms(request, messageDto);
+                return "사용자 확인 완료";
+            }
+            return "아이디에 이름 또는 번호가 일치하지 않습니다.";
+        }
+    }
+
+    public String verifyFindId(String name, String phoneNum)  {
         {
             if (bMemberRepository.findId(name, phoneNum).isPresent()) {
                 return bMemberRepository.findId(name, phoneNum).get().getBMember_id();
@@ -206,5 +224,29 @@ public class JoinService {
                 return sMemberRepository.findId(name, phoneNum).get().getSMember_id();
             }
         }
+    public String matchId(String id) {
+        if (ibMemberRepository.findById(id).isPresent()) {
+            return ibMemberRepository.findById(id).get().getBMember_id();
+        }
+        if (isMemberRepository.findById(id).isPresent()) {
+            return isMemberRepository.findById(id).get().getSMember_id();
+        }
+
+        return "등록된 아이디가 없습니다.";
+    }
+
+    public String changePwd(Map<String, String> members){
+        if(ibMemberRepository.findById(members.get("id")).isPresent()){
+
+            bMemberRepository.changePwd(members.get("id"),passwordEncoder.encode(members.get("pwd")));
+            return "비밀번호 변경 완료";
+        }
+        if(isMemberRepository.findById(members.get("id")).isPresent()){
+
+            sMemberRepository.changePwd(members.get("id"),passwordEncoder.encode(members.get("pwd")));
+            return "비밀번호 변경 완료";
+        }
+        return "비밀번호 변경 실패";
+    }
 }
 

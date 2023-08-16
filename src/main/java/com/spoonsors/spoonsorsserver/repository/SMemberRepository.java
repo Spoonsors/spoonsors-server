@@ -2,7 +2,9 @@ package com.spoonsors.spoonsorsserver.repository;
 
 import com.spoonsors.spoonsorsserver.entity.SMember;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.Map;
@@ -27,6 +29,23 @@ public class SMemberRepository {
                 .getResultList().stream().findAny();
     }
 
+    public Optional<SMember> findPwd(String id,String name, String phoneNum){
+        return em.createQuery("SELECT s FROM SMember s WHERE s.sMember_id = :id and s.sMember_name = :name and s.sMember_phoneNumber= : phoneNum", SMember.class)
+                .setParameter("id",id)
+                .setParameter("name",name)
+                .setParameter("phoneNum", phoneNum)
+                .getResultList().stream().findAny();
+    }
+
+    @Modifying
+    @Transactional
+    public int changePwd(String id, String pwd){
+        return em.createQuery("UPDATE SMember s SET s.sMember_pwd = :pwd WHERE s.sMember_id = :id")
+                .setParameter("id",id)
+                .setParameter("pwd",pwd)
+                .executeUpdate();
+
+    }
     public void putToken(Map<String, String> token){
         SMember sMember = em.find(SMember.class, token.get("id"));
         sMember.setToken(token.get("token"));

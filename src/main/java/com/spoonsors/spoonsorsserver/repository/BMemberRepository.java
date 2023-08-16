@@ -1,10 +1,10 @@
 package com.spoonsors.spoonsorsserver.repository;
 
 import com.spoonsors.spoonsorsserver.entity.BMember;
-import com.spoonsors.spoonsorsserver.entity.Fridge;
-import com.spoonsors.spoonsorsserver.entity.Post;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.Map;
@@ -26,6 +26,23 @@ public class BMemberRepository {
                 .setParameter("name",name)
                 .setParameter("phoneNum", phoneNum)
                 .getResultList().stream().findAny();
+    }
+
+    public Optional<BMember> findPwd(String id, String name, String phoneNum){
+        return em.createQuery("SELECT b FROM BMember b WHERE b.bMember_id = : id and b.bMember_name = :name and b.bMember_phoneNumber= : phoneNum", BMember.class)
+                .setParameter("id",id)
+                .setParameter("name",name)
+                .setParameter("phoneNum", phoneNum)
+                .getResultList().stream().findAny();
+    }
+    @Modifying
+    @Transactional
+    public int changePwd(String id, String pwd){
+        return em.createQuery("UPDATE BMember b SET b.bMember_pwd = :pwd WHERE b.bMember_id = :id")
+                .setParameter("id",id)
+                .setParameter("pwd",pwd)
+                .executeUpdate();
+
     }
     public void putToken(Map<String, String> token){
         BMember bMember = em.find(BMember.class, token.get("id"));
