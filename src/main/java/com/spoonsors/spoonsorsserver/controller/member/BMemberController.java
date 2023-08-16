@@ -1,6 +1,7 @@
 package com.spoonsors.spoonsorsserver.controller.member;
 
 import com.spoonsors.spoonsorsserver.entity.bMember.BMemberSignUpDto;
+import com.spoonsors.spoonsorsserver.entity.login.LoginDto;
 import com.spoonsors.spoonsorsserver.service.member.BMemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ public class BMemberController {
     }
 
     @PostMapping("/login/bMember")
-    public String login(@RequestBody Map<String, String> member) {
+    public LoginDto login(@RequestBody Map<String, String> member) {
         return bMemberService.login(member);
     }
 

@@ -2,12 +2,14 @@ package com.spoonsors.spoonsorsserver.service.member;
 
 import com.spoonsors.spoonsorsserver.entity.BMember;
 import com.spoonsors.spoonsorsserver.entity.bMember.BMemberSignUpDto;
+import com.spoonsors.spoonsorsserver.entity.login.LoginDto;
 import com.spoonsors.spoonsorsserver.loginInfra.JwtTokenProvider;
 import com.spoonsors.spoonsorsserver.repository.BMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.ISMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.IbMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.SMemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Transactional
 @Service
-
+@Slf4j
 public class BMemberService {
 
     private final IbMemberRepository ibMemberRepository;
@@ -56,24 +58,24 @@ public class BMemberService {
     }
 
 
-    public String login(Map<String, String> members) {
-
-       //BMember bMember = ibMemberRepository.findByEmail(members.get("Id"))
-       //         .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Id 입니다."));
-
-        //String password = members.get("password");
-        //if (!bMember.(passwordEncoder, password)) {
-        //    throw new IllegalArgumentException("잘못된 비밀번호입니다.");
-       // }
-        BMember bMember = ibMemberRepository.findById(members.get("Id"))
-                .filter(it -> encoder.matches(members.get("password"), it.getBMember_pwd()))   // 암호화된 비밀번호와 비교하도록 수정
+    public LoginDto login(Map<String, String> members) {
+        log.info("members.get(\"id\")={}",members.get("id"));
+        BMember bMember = ibMemberRepository.findById(members.get("id"))
+                .filter(it -> encoder.matches(members.get("pwd"), it.getBMember_pwd()))   // 암호화된 비밀번호와 비교하도록 수정
                 .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 일치하지 않습니다."));
-
+        log.info("members.get(\"pwd\")={}",members.get("pwd"));
 
         List<String> roles = new ArrayList<>();
         roles.add(bMember.getRole().name());
 
-        return jwtTokenProvider.createToken(bMember.getBMember_id(), roles);
+        LoginDto loginDto = new LoginDto();
+        loginDto.setMember_id(bMember.getBMember_id());
+        loginDto.setMember_name(bMember.getBMember_name());
+        loginDto.setMember_nickname(bMember.getBMember_nickname());
+        loginDto.setMember_address(bMember.getBMember_address());
+        loginDto.setMember_phoneNumber(bMember.getBMember_phoneNumber());
+        loginDto.setToken(jwtTokenProvider.createToken(bMember.getBMember_id(), roles));
+        return loginDto;
     }
 
     public void putToken(Map<String, String> token){
