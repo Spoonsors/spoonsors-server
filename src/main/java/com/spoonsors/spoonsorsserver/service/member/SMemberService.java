@@ -1,6 +1,7 @@
 package com.spoonsors.spoonsorsserver.service.member;
 
 import com.spoonsors.spoonsorsserver.entity.SMember;
+import com.spoonsors.spoonsorsserver.entity.login.LoginDto;
 import com.spoonsors.spoonsorsserver.entity.sMember.SMemberSignUpDto;
 import com.spoonsors.spoonsorsserver.loginInfra.JwtTokenProvider;
 import com.spoonsors.spoonsorsserver.repository.BMemberRepository;
@@ -55,24 +56,23 @@ public class SMemberService {
         return member.getSMember_id();
     }
 
-    public String login(Map<String, String> members) {
+    public LoginDto login(Map<String, String> members) {
 
-        //BMember bMember = ibMemberRepository.findByEmail(members.get("Id"))
-        //         .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Id 입니다."));
-
-        //String password = members.get("password");
-        //if (!bMember.(passwordEncoder, password)) {
-        //    throw new IllegalArgumentException("잘못된 비밀번호입니다.");
-        // }
-        SMember sMember = isMemberRepository.findById(members.get("Id"))
-                .filter(it -> encoder.matches(members.get("password"), it.getSMember_pwd()))   // 암호화된 비밀번호와 비교하도록 수정
+        SMember sMember = isMemberRepository.findById(members.get("id"))
+                .filter(it -> encoder.matches(members.get("pwd"), it.getSMember_pwd()))   // 암호화된 비밀번호와 비교하도록 수정
                 .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 일치하지 않습니다."));
 
 
         List<String> roles = new ArrayList<>();
         roles.add(sMember.getRole().name());
 
-        return jwtTokenProvider.createToken(sMember.getSMember_id(), roles);
+        LoginDto loginDto = new LoginDto();
+        loginDto.setMember_id(sMember.getSMember_id());
+        loginDto.setMember_name(sMember.getSMember_name());
+        loginDto.setMember_nickname(sMember.getSMember_nickname());
+        loginDto.setMember_phoneNumber(sMember.getSMember_phoneNumber());
+        loginDto.setToken(jwtTokenProvider.createToken(sMember.getSMember_id(), roles));
+        return loginDto;
     }
 
     public void putToken(Map<String, String> token){
