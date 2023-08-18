@@ -1,6 +1,7 @@
 package com.spoonsors.spoonsorsserver.controller.manager;
 
 import com.spoonsors.spoonsorsserver.entity.Ingredients;
+import com.spoonsors.spoonsorsserver.entity.manager.CertificateDto;
 import com.spoonsors.spoonsorsserver.entity.manager.IngredientsDto;
 import com.spoonsors.spoonsorsserver.service.manager.ManagerService;
 import lombok.RequiredArgsConstructor;
@@ -55,5 +56,21 @@ public class ManagerController {
     public String delete(@PathVariable Long ingredients_id){
         managerService.remove(ingredients_id);
         return ingredients_id + "번 식재료 삭제 완료";
+    }
+
+    // 수혜자 증명서 등록 상태 확인
+    @GetMapping("/manager/certificate")
+    public List<CertificateDto> certificate(){return managerService.certificate();}
+
+    // 수혜자 증명서 등록 상태 변경
+    @PutMapping("/manager/isVerified/{bMember_id}")
+    public String isVeified(@PathVariable String bMember_id){
+        String result;
+        result = managerService.isVerified(bMember_id);
+        if(result == null){
+            return "증명서 등록 상태 변경 실패";
+        }else {
+            return result;
+        }
     }
 }
