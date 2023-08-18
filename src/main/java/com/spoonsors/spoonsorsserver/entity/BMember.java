@@ -40,6 +40,9 @@ public class BMember extends BaseTime{
     @Column( length = 100, nullable = false)
     private String bMember_name;
 
+    @Column( length = 100, nullable = false)
+    private String bMember_birth;
+
     @JsonIgnore
     @Column( length = 100, nullable = false, unique=true)
     private String bMember_phoneNumber;

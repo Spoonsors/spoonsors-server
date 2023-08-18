@@ -25,6 +25,9 @@ public class BMemberSignUpDto {
     @NotBlank(message = "이름을 입력해주세요.")
     private String name;
 
+    @NotBlank(message = "생년월일을 입력해주세요.(예:20010904)")
+    private String birth;
+
     @NotBlank(message = "닉네임을 입력해주세요.")
     @Size(min=2, message = "2글자 이상으로 입력해주세요.")
     private String nickname;
@@ -45,6 +48,7 @@ public class BMemberSignUpDto {
                 .bMember_id(id)
                 .bMember_pwd(pwd)
                 .bMember_name(name)
+                .bMember_birth(birth)
                 .bMember_nickname(nickname)
                 .bMember_phoneNumber(phoneNumber)
                 .bMember_address(address)

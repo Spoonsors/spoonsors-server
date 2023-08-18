@@ -48,4 +48,12 @@ public class BMemberRepository {
         BMember bMember = em.find(BMember.class, token.get("id"));
         bMember.setToken(token.get("token"));
     }
+    @Modifying
+    @Transactional
+    public int updateVerified(String bMember_id){
+        return em.createQuery("UPDATE BMember b SET b.is_verified = 1 WHERE b.bMember_id = :bMember_id")
+                .setParameter("bMember_id",bMember_id)
+                .executeUpdate();
+    }
+
 }

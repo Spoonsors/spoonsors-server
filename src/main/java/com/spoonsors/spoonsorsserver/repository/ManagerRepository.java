@@ -1,6 +1,8 @@
 package com.spoonsors.spoonsorsserver.repository;
 
+import com.spoonsors.spoonsorsserver.entity.BMember;
 import com.spoonsors.spoonsorsserver.entity.Ingredients;
+import com.spoonsors.spoonsorsserver.entity.manager.CertificateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -41,4 +43,5 @@ public class ManagerRepository {
                 .setParameter("findName", findName)
                 .getSingleResult();
     }
+
 }
