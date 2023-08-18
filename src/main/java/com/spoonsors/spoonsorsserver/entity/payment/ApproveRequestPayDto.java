@@ -1,7 +1,9 @@
 package com.spoonsors.spoonsorsserver.entity.payment;
 
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
 public class ApproveRequestPayDto {
     private String aid;

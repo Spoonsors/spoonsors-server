@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class Order {
-    private String sMember_id;
     private String product_name; //상품명
     private Integer price; //가격
 }
