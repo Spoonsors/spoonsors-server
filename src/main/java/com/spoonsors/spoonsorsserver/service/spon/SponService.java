@@ -50,10 +50,6 @@ public class SponService {
         Optional<Spon> optionalSpon= iSponRepository.findById(spon_id);
         Spon spon = optionalSpon.get();
 
-        //후원이 완료된 물품일 경우 오류
-        if(spon.getSpon_state()!=0){
-            return "이미 후원이 완료된 물품입니다.";
-        }
         Optional<SMember> optionalSMember = iSMemberRepository.findById(sMemberId);
         SMember sMember = optionalSMember.get();
 
@@ -79,6 +75,18 @@ public class SponService {
        return "후원 완료";
    }
 
+    //후원 상태 확인
+    public String checkSpon(Long spon_id){
+        Optional<Spon> optionalSpon= iSponRepository.findById(spon_id);
+        Spon spon = optionalSpon.get();
+
+        //후원이 완료된 물품일 경우 오류
+        if(spon.getSpon_state()!=0){
+            return "이미 후원이 완료된 물품입니다.";
+        }
+
+        return "후원 가능";
+    }
    //후원 내역
     public List<SponDto> getSponList(String sMemberId){
         Optional<SMember> optionalSMember = iSMemberRepository.findById(sMemberId);
