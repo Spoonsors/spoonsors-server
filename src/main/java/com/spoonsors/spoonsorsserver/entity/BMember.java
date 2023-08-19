@@ -44,7 +44,7 @@ public class BMember extends BaseTime{
     private String bMember_birth;
 
     @JsonIgnore
-    @Column( length = 100, nullable = false, unique=true)
+    @Column( length = 100, nullable = false)
     private String bMember_phoneNumber;
 
     @JsonIgnore
@@ -67,6 +67,9 @@ public class BMember extends BaseTime{
 
     @ColumnDefault("0")
     private int is_verified; //초기 0, 증명 완료 1
+
+    @Column(nullable = false)
+    private String profile_path;
 
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.bMember_pwd = passwordEncoder.encode(bMember_pwd);

@@ -39,7 +39,7 @@ public class SMember extends BaseTime {
     private String sMember_name;
 
     @JsonIgnore
-    @Column(length = 100, nullable = false, unique=true)
+    @Column(length = 100, nullable = false)
     private String sMember_phoneNumber;
 
     @JsonIgnore
@@ -50,6 +50,9 @@ public class SMember extends BaseTime {
     private Role role;
 
     private String token;
+
+    @Column(nullable = false)
+    private String profile_path;
 
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.sMember_pwd = passwordEncoder.encode(sMember_pwd);

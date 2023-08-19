@@ -4,6 +4,7 @@ import com.spoonsors.spoonsorsserver.entity.Role;
 import com.spoonsors.spoonsorsserver.entity.SMember;
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -32,6 +33,8 @@ public class SMemberSignUpDto {
 
     private String token;
 
+    private String profilePath;
+
     @Builder
     public SMember toEntity(){
         return SMember.builder()
@@ -42,6 +45,7 @@ public class SMemberSignUpDto {
                 .sMember_phoneNumber(phoneNumber)
                 .role(Role.SMEMBER)
                 .token(token)
+                .profile_path(profilePath)
                 .build();
     }
 }
