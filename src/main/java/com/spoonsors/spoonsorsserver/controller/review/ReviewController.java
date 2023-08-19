@@ -2,6 +2,7 @@ package com.spoonsors.spoonsorsserver.controller.review;
 
 import com.spoonsors.spoonsorsserver.entity.Review;
 import com.spoonsors.spoonsorsserver.entity.review.ReviewDto;
+import com.spoonsors.spoonsorsserver.service.Image.S3Uploader;
 import com.spoonsors.spoonsorsserver.service.review.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +19,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
-
+    private final S3Uploader s3Uploader;
 
     //리뷰 둥록
     @PostMapping(value = "/review/create/{post_id}", consumes = {MediaType.APPLICATION_JSON_VALUE, "multipart/form-data"})
     public Review wirteReview(@PathVariable Long post_id, @RequestPart ReviewDto reviewDto, @RequestPart(value = "img", required = false) MultipartFile img)throws IOException{
         Review review = null;
         try {
-            review = reviewService.writeReview(post_id, reviewDto, img);
+            String url = s3Uploader.upload(img,"review");
+            review = reviewService.writeReview(post_id, reviewDto, url);
         }catch (IOException e){
             e.printStackTrace();
         }

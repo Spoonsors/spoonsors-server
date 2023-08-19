@@ -32,6 +32,7 @@ public class SMemberSignUpDto {
 
     private String token;
 
+    private String profilePath;
     @Builder
     public SMember toEntity(){
         return SMember.builder()
@@ -42,6 +43,7 @@ public class SMemberSignUpDto {
                 .sMember_phoneNumber(phoneNumber)
                 .role(Role.SMEMBER)
                 .token(token)
+                .profile_path(profilePath)
                 .build();
     }
 }

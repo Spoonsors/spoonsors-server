@@ -11,11 +11,11 @@ public class GetFridgeDto {
     private String ownerId;
     private String name;
     private Integer isFrized;
-    private byte[] img;
+    private String img;
     private Date expirationDate;
 
     public GetFridgeDto(String ownerId, String name, Integer isFrized,
-                        byte[] img, Date expirationDate){
+                        String img, Date expirationDate){
         this.expirationDate=expirationDate;
         this.img=img;
         this.isFrized=isFrized;

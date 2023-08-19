@@ -37,10 +37,11 @@ public class BMemberSignUpDto {
 
     private String address;
 
-    private byte[] certificate;
+    private String certificate;
 
     private String token;
 
+    private String profilePath;
 
     @Builder
     public BMember toEntity(){
@@ -56,6 +57,7 @@ public class BMemberSignUpDto {
                 .role(Role.BMEMBER)
                 .token(token)
                 .is_verified(0)
+                .profile_path(profilePath)
                 .build();
     }
 }

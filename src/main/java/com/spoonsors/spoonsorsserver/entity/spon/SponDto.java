@@ -14,7 +14,7 @@ public class SponDto {
     private String writer_nickname;
     private String ingredients_name;
     private String product_name;
-    private byte[] ingredients_image;
+    private String ingredients_image;
     private Integer price;
     private Date spon_date;
 }

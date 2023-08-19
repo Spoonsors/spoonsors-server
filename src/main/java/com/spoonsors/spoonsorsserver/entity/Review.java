@@ -24,8 +24,7 @@ public class Review {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    @Lob
-    private byte[] review_img;
+    private String review_img;
 
     @Column(length = 400)
     private String review_txt;

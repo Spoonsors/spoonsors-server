@@ -19,7 +19,7 @@ public class CertificateDto {
 
     private String bMember_address;
 
-    private byte[] bMember_certificate;
+    private String bMember_certificate;
 
     private int is_verified;
 }
