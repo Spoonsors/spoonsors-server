@@ -4,6 +4,7 @@ import com.spoonsors.spoonsorsserver.entity.BMember;
 import com.spoonsors.spoonsorsserver.entity.Role;
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -43,6 +44,7 @@ public class BMemberSignUpDto {
 
     private String profilePath;
 
+
     @Builder
     public BMember toEntity(){
         return BMember.builder()
@@ -56,6 +58,7 @@ public class BMemberSignUpDto {
                 .bMember_certificate(certificate)
                 .role(Role.BMEMBER)
                 .token(token)
+                .profile_path(profilePath)
                 .is_verified(0)
                 .profile_path(profilePath)
                 .build();

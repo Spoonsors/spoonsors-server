@@ -53,6 +53,7 @@ public class SMember extends BaseTime {
 
     @Column(nullable = false)
     private String profile_path;
+
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.sMember_pwd = passwordEncoder.encode(sMember_pwd);
     }

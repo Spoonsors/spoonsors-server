@@ -5,10 +5,12 @@ import com.spoonsors.spoonsorsserver.entity.Spon;
 import com.spoonsors.spoonsorsserver.entity.payment.ApproveRequestPayDto;
 import com.spoonsors.spoonsorsserver.entity.payment.RequestPayDto;
 import com.spoonsors.spoonsorsserver.repository.ISponRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
@@ -17,11 +19,13 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class KakaoPayService {
 
     private ApproveRequestPayDto approveRequestPayDto;
     private RequestPayDto requestPayDto;
-    private ISponRepository iSponRepository;
+    private final ISponRepository iSponRepository;
 
     public String payReady(String SMemberId, Long spon_id) {
         Optional<Spon> optionalSpon= iSponRepository.findById(spon_id);
