@@ -24,23 +24,18 @@ public class FridgeService {
     private final IbMemberRepository ibMemberRepository;
     private final IFridgeRepository iFridgeRepository;
 
-    public Fridge addFridgeItem(String bMemberId, FridgeDto fridgeDto, MultipartFile img) throws IOException {
+    public Fridge addFridgeItem(String bMemberId, FridgeDto fridgeDto, String img) throws IOException {
         Optional<BMember> optionalBMember =ibMemberRepository.findById(bMemberId);
         BMember bMember = optionalBMember.get();
 
         Fridge addFridgeItem=iFridgeRepository.save(fridgeDto.toEntity());
         addFridgeItem.setBMember(bMember);
 
-        if(img!=null && !img.isEmpty()){
-            addFridgeItem.setFridge_item_img(ImageUtils.compressImage(img.getBytes()));
-        }
+
+            addFridgeItem.setFridge_item_img(img);
         return addFridgeItem;
     }
 
-    public byte[] downloadImage(Long fridge_id) {
-        Fridge fridge = fridgeRepository.findById(fridge_id);
-        return ImageUtils.decompressImage(fridge.getFridge_item_img());
-    }
 
 
     public List<Fridge> getFridgeDto(String bMemberId){

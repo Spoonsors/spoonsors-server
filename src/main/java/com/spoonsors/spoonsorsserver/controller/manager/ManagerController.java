@@ -3,6 +3,7 @@ package com.spoonsors.spoonsorsserver.controller.manager;
 import com.spoonsors.spoonsorsserver.entity.Ingredients;
 import com.spoonsors.spoonsorsserver.entity.manager.CertificateDto;
 import com.spoonsors.spoonsorsserver.entity.manager.IngredientsDto;
+import com.spoonsors.spoonsorsserver.service.Image.S3Uploader;
 import com.spoonsors.spoonsorsserver.service.manager.ManagerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ManagerController {
 
     private final ManagerService managerService;
+    private final S3Uploader s3Uploader;
     // 식재료 목록 조회
     @GetMapping("/manager/findAll")
     public List<Ingredients> findAll(){
@@ -32,11 +34,13 @@ public class ManagerController {
     }
 
     // 식재료 등록
+
     @PostMapping(value ="/manager/create", consumes = {MediaType.APPLICATION_JSON_VALUE, "multipart/form-data"})
     public Ingredients create(@RequestPart IngredientsDto ingredientsDto, @RequestPart(value = "img", required = false) MultipartFile img){
         Ingredients ingredient = null;
         try{
-            ingredient = managerService.regist(ingredientsDto, img);
+            String url = s3Uploader.upload(img,"ingredients");
+            ingredient = managerService.regist(ingredientsDto, url);
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -45,9 +49,10 @@ public class ManagerController {
 
     //식재로 수정
     @PutMapping("/manager/update/{ingredients_id}")
-    public Ingredients update(@PathVariable Long ingredients_id, @RequestPart IngredientsDto ingredientsDto, @RequestPart(value = "img", required = false) MultipartFile img){
+    public Ingredients update(@PathVariable Long ingredients_id, @RequestPart IngredientsDto ingredientsDto, @RequestPart(value = "img", required = false) MultipartFile img) throws IOException {
         Ingredients ingredient = null;
-        ingredient = managerService.update(ingredients_id, ingredientsDto, img);
+        String url = s3Uploader.upload(img,"ingredients");
+        ingredient = managerService.update(ingredients_id, ingredientsDto, url);
         return ingredient;
     }
 

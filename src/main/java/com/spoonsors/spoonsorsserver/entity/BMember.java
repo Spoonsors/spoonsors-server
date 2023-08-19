@@ -53,7 +53,7 @@ public class BMember extends BaseTime{
 
     @JsonIgnore
     @Column(nullable = false) //증명서 이미지
-    private byte[] bMember_certificate;
+    private String bMember_certificate;
 
     @JsonIgnore
     @OneToMany(mappedBy = "bMember")

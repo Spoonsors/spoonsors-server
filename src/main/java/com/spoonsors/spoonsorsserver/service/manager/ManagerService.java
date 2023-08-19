@@ -32,12 +32,11 @@ public class ManagerService {
     private final IIngredientsRepository iIngredientsRepository;
 
     //식재료 등록
-    public Ingredients regist(IngredientsDto ingredientsDto, MultipartFile img) throws IOException {
+    public Ingredients regist(IngredientsDto ingredientsDto, String img) throws IOException {
         Ingredients addIngredientItem = iManagerRepository.save(ingredientsDto.toEntity());
 
-        if(img!=null && !img.isEmpty()){
-            addIngredientItem.setIngredients_image(ImageUtils.compressImage(img.getBytes()));
-        }
+
+        addIngredientItem.setIngredients_image(img);
         return addIngredientItem;
     }
 
@@ -52,7 +51,7 @@ public class ManagerService {
     }
 
     //식재료 수정
-    public Ingredients update( Long ingredients_id,  IngredientsDto ingredientsDto, MultipartFile img){
+    public Ingredients update( Long ingredients_id,  IngredientsDto ingredientsDto, String img){
 
         Ingredients updateIngredient  = new Ingredients();
         updateIngredient.setIngredients_id(ingredients_id);
@@ -60,13 +59,7 @@ public class ManagerService {
         updateIngredient.setProduct_name(ingredientsDto.getProductName());
         updateIngredient.setPrice(ingredientsDto.getPrice());
 
-        if(img!=null && !img.isEmpty()){
-            try {
-                updateIngredient.setIngredients_image(ImageUtils.compressImage(img.getBytes()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        updateIngredient.setIngredients_image(img);
 
         return iIngredientsRepository.save(updateIngredient);
     }

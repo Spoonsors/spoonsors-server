@@ -1,5 +1,6 @@
 package com.spoonsors.spoonsorsserver.controller.spon;
 
+import com.spoonsors.spoonsorsserver.entity.Spon;
 import com.spoonsors.spoonsorsserver.entity.spon.SponDto;
 import com.spoonsors.spoonsorsserver.service.spon.SponService;
 import lombok.RequiredArgsConstructor;

@@ -38,7 +38,7 @@ public class BMemberSignUpDto {
 
     private String address;
 
-    private byte[] certificate;
+    private String certificate;
 
     private String token;
 
@@ -60,6 +60,7 @@ public class BMemberSignUpDto {
                 .token(token)
                 .profile_path(profilePath)
                 .is_verified(0)
+                .profile_path(profilePath)
                 .build();
     }
 }

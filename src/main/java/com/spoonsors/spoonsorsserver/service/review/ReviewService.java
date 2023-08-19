@@ -30,15 +30,13 @@ public class ReviewService {
     private final PostRepository postRepository;
     private final ReviewRepository reviewRepository;
     //리뷰 작성
-    public Review writeReview(Long postId, ReviewDto reviewDto, MultipartFile img)throws IOException {
+    public Review writeReview(Long postId, ReviewDto reviewDto, String img)throws IOException {
         Optional<Post> optionalPost =iPostRepository.findById(postId);
         Post post = optionalPost.get();
         reviewDto.setPost(post);
         Review addRreview = iReviewRepository.save(reviewDto.toEntity());
         postRepository.changeReviewState(postId);
-        if(img!=null && !img.isEmpty()){
-            addRreview.setReview_img(ImageUtils.compressImage(img.getBytes()));
-        }
+            addRreview.setReview_img(img);
         return addRreview;
     }
 

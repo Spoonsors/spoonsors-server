@@ -2,6 +2,7 @@ package com.spoonsors.spoonsorsserver.controller.member;
 
 import com.spoonsors.spoonsorsserver.entity.Fridge;
 import com.spoonsors.spoonsorsserver.entity.bMember.FridgeDto;
+import com.spoonsors.spoonsorsserver.service.Image.S3Uploader;
 import com.spoonsors.spoonsorsserver.service.member.FridgeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,13 +21,14 @@ import java.util.List;
 public class FridgeController {
 
     private final FridgeService fridgeService;
-
+    private final S3Uploader s3Uploader;
     //아이템 추가
     @PostMapping(value = "bMember/fridge/add/{bMemberId}", consumes = {MediaType.APPLICATION_JSON_VALUE, "multipart/form-data"})
     public Fridge addFridgeItem(@PathVariable String bMemberId, @RequestPart FridgeDto fridgeDto, @RequestPart(value = "img", required = false) MultipartFile img){
         Fridge addedItem= null;
         try {
-            addedItem = fridgeService.addFridgeItem(bMemberId, fridgeDto, img);
+            String url = s3Uploader.upload(img,"fridge");
+            addedItem = fridgeService.addFridgeItem(bMemberId, fridgeDto, url);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,12 +49,5 @@ public class FridgeController {
         return "삭제가 완료되었습니다.";
     }
 
-    @GetMapping("/showFridgeImage/{fridge_id}")
-    public ResponseEntity<?> showFridgeImage(@PathVariable Long fridge_id) {
-        byte[] downloadImage = fridgeService.downloadImage(fridge_id);
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf("image/png"))
-                .body(downloadImage);
-    }
 
 }
