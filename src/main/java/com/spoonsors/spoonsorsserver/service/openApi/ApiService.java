@@ -16,10 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -47,6 +44,21 @@ public class ApiService {
         String urlStr = "http://openapi.foodsafetykorea.go.kr/api/"+
                 serviceKey +"/"+ serviceId +"/json/"+"1/500/RCP_NM="+ RCP_NM;
         return init(urlStr);
+    }
+    // 밥, 국&찌개 반찬 검색
+    public List<ApiDto> classification(String RCP_PAT2) throws IOException{
+
+        String urlStr;
+        if(Objects.equals(RCP_PAT2, "반찬")) {
+            urlStr = "http://openapi.foodsafetykorea.go.kr/api/" +
+                    serviceKey + "/" + serviceId + "/json/" + "1/10/RCP_PAT2=" + RCP_PAT2;
+        }else{
+            urlStr = "http://openapi.foodsafetykorea.go.kr/api/" +
+                    serviceKey + "/" + serviceId + "/json/" + "1/5/RCP_PAT2=" + RCP_PAT2;
+        }
+        return init(urlStr);
+
+
     }
     public List<ApiDto> init(String urlStr) throws IOException{
 //        String json = "";
