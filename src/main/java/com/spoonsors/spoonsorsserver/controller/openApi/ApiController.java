@@ -36,6 +36,11 @@ public class ApiController {
         return apiService.findByName(RCP_NM.replaceAll(" ",""));
 
     }
+    //밥, 반찬, 국&찌개
+    @GetMapping("/recipe/classification")
+    public List<ApiDto> classification(@RequestParam String RCP_PAT2) throws IOException{
 
+        return apiService.classification(RCP_PAT2);
+    }
 
 }
