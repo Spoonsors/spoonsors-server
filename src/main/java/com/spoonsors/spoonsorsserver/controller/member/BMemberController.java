@@ -2,13 +2,18 @@ package com.spoonsors.spoonsorsserver.controller.member;
 
 import com.spoonsors.spoonsorsserver.entity.bMember.BMemberSignUpDto;
 import com.spoonsors.spoonsorsserver.entity.login.LoginDto;
+import com.spoonsors.spoonsorsserver.service.Image.S3Uploader;
 import com.spoonsors.spoonsorsserver.service.member.BMemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Map;
 
 @Slf4j
@@ -17,10 +22,14 @@ import java.util.Map;
 public class BMemberController {
 
     private final BMemberService bMemberService;
+    private final S3Uploader s3Uploader;
 
-    @PostMapping("/join/bMember")
-    public String join(@RequestBody BMemberSignUpDto dto) throws Exception{
-        String id=bMemberService.signUp(dto);
+    @PostMapping(value = "/join/bMember", consumes = {MediaType.APPLICATION_JSON_VALUE, "multipart/form-data"})
+    public String join(@RequestPart BMemberSignUpDto dto, @RequestPart(value = "img", required = false) MultipartFile img) throws Exception{
+
+        String url = s3Uploader.upload(img, "certificate");
+        String id = bMemberService.signUp(dto,url);
+
         return id+" 회원가입 완료";
     }
 
