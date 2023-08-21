@@ -32,7 +32,8 @@ public class BMemberService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder encoder;
-    public String signUp(BMemberSignUpDto requestDto) throws Exception {
+    public String signUp(BMemberSignUpDto requestDto, String img) throws Exception {
+
 
         if (ibMemberRepository.findById(requestDto.getId()).isPresent()){
             throw new Exception("이미 존재하는 아이디입니다.");
@@ -49,7 +50,7 @@ public class BMemberService {
         if (!requestDto.getPwd().equals(requestDto.getPwd_check())){
             throw new Exception("비밀번호가 일치하지 않습니다.");
         }
-
+        requestDto.setCertificate(img);
         BMember member = ibMemberRepository.save(requestDto.toEntity());
         member.encodePassword(passwordEncoder);
 
