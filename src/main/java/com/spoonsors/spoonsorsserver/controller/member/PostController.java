@@ -23,7 +23,7 @@ public class PostController {
     public String writePost(@PathVariable String bMemberId, @RequestBody WritePostDto writePostDto){
         Post post=postService.writePost(bMemberId, writePostDto);
         sponService.addSpon(writePostDto.getItem_list(), post.getPost_id());
-        return "["+post.getPost_title()+"] 작성 완료";
+        return "["+post.getPost_id()+"]"+ "\""+post.getPost_title()+"\""+ " 작성 완료";
     }
 
     //후원 글 목록 확인

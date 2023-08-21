@@ -23,17 +23,18 @@ public class ReviewController {
 
     //리뷰 둥록
     @PostMapping(value = "/review/create/{post_id}", consumes = {MediaType.APPLICATION_JSON_VALUE, "multipart/form-data"})
-    public Review wirteReview(@PathVariable Long post_id, @RequestPart ReviewDto reviewDto, @RequestPart(value = "img", required = false) MultipartFile img)throws IOException{
+    public Review wirteReview(@PathVariable Long post_id, @RequestPart(value = "reviewTxt") String reviewTxt, @RequestPart(value = "img") MultipartFile img){
         Review review = null;
         try {
             String url = s3Uploader.upload(img,"review");
-            review = reviewService.writeReview(post_id, reviewDto, url);
+            review = reviewService.writeReview(post_id, reviewTxt, url);
         }catch (IOException e){
             e.printStackTrace();
         }
 
         return review;
     }
+
     // 내가 작성한 리뷰 확인
     @GetMapping("/review/findMyReview/{bMemberId}")
     public List<Review> findMyReview(@PathVariable String bMemberId){

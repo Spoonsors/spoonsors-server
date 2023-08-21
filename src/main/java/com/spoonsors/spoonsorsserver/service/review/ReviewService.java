@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,15 +29,25 @@ public class ReviewService {
     private final IPostRepository iPostRepository;
     private final IbMemberRepository ibMemberRepository;
     private final PostRepository postRepository;
-    private final ReviewRepository reviewRepository;
+
     //리뷰 작성
-    public Review writeReview(Long postId, ReviewDto reviewDto, String img)throws IOException {
+    public Review writeReview(Long postId, String reviewTxt, String img)throws IOException {
+        Date date = new Date();
+
         Optional<Post> optionalPost =iPostRepository.findById(postId);
         Post post = optionalPost.get();
+
+        ReviewDto reviewDto=new ReviewDto();
+        reviewDto.setReview_txt(reviewTxt);
         reviewDto.setPost(post);
+        reviewDto.setReview_date(date);
+
+        //리뷰 저장
         Review addRreview = iReviewRepository.save(reviewDto.toEntity());
+        addRreview.setReview_img(img);
+
         postRepository.changeReviewState(postId);
-            addRreview.setReview_img(img);
+
         return addRreview;
     }
 
@@ -46,9 +57,7 @@ public class ReviewService {
         List<Post> postList = optionalBMember.get().getPosts();
         List<Review> myReviewList = new ArrayList<>();
         for(Post p : postList){
-//            Optional<Review> myReview = reviewRepository.findById(p.getPost_id());
-//            log.info("myReview={}",myReview.get().getReview_txt());
-//            myReviewList.add(myReview.get());
+
             if(p.getHas_review().equals(1)){
                 Optional<Review> optionalReview = iReviewRepository.findById(p.getPost_id());
                 Review myReview = optionalReview.get();
