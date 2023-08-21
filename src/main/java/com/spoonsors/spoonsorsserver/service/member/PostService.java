@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,10 +28,14 @@ public class PostService {
 
     //글 작성
     public Post writePost(String bMemberId, WritePostDto writePostDto){
+        Date date = new Date();
         Optional<BMember> optionalBMember =ibMemberRepository.findById(bMemberId);
         BMember bMember = optionalBMember.get();
         writePostDto.setBMember(bMember);
+        writePostDto.setPost_date(date);
+        //글 저장
         Post post=iPostRepository.save(writePostDto.toEntity());
+
         return post;
     }
 
