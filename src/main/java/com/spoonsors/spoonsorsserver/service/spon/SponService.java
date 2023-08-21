@@ -22,6 +22,7 @@ import java.util.Optional;
 public class SponService {
 
     private final ManagerRepository managerRepository;
+    private final SponRepository sponRepository;
     private final PostRepository postRepository;
     private final IPostRepository iPostRepository;
     private final ISponRepository iSponRepository;
@@ -46,9 +47,10 @@ public class SponService {
     }
 
     //후원 신청(후원자)
-   public String applySpon(Long spon_id, String sMemberId){
-        Optional<Spon> optionalSpon= iSponRepository.findById(spon_id);
-        Spon spon = optionalSpon.get();
+   public String applySpon(String tid, String sMemberId){
+
+       Optional <Spon> optionalSpon = sponRepository.findByTid(tid);
+       Spon spon = optionalSpon.get();
 
         Optional<SMember> optionalSMember = iSMemberRepository.findById(sMemberId);
         SMember sMember = optionalSMember.get();
@@ -62,6 +64,7 @@ public class SponService {
                 .sMember(sMember)
                 .post(post)
                 .spon_state(1)
+               .tid(tid)
                 .build();
 
        iSponRepository.save(spon2);

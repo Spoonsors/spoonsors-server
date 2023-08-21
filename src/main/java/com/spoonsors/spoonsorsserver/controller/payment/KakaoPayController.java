@@ -1,5 +1,6 @@
 package com.spoonsors.spoonsorsserver.controller.payment;
 
+import com.spoonsors.spoonsorsserver.entity.payment.ApproveRequestPayDto;
 import com.spoonsors.spoonsorsserver.service.payment.KakaoPayService;
 import com.spoonsors.spoonsorsserver.service.spon.SponService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,9 @@ public class KakaoPayController {
         if(txt.equals("후원 가능")){
             //상태 괜찮으면 카카오서비스 payReady 실행
             String link= kakaoPayService.payReady(sMemberId, spon_id);
+            if(link=="결제 요청 실패"){
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("결제 요청 실패");
+            }
             return ResponseEntity.status(HttpStatus.OK).body(link);
         }else if(txt.equals("이미 후원이 완료된 물품입니다.")){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(txt);
@@ -36,11 +40,12 @@ public class KakaoPayController {
     }
 
     //결제 완료
-    @GetMapping("/sMember/kakaoPay/completed/{spon_id}/{sMemberId}")
-    public ResponseEntity<?>  kakaoPaySuccess(@RequestParam("pg_token") String pg_token, @PathVariable Long spon_id, @PathVariable String sMemberId) {
-
-        if(kakaoPayService.payApprove(pg_token, sMemberId)!=null){
-            sponService.applySpon(spon_id, sMemberId);
+    @GetMapping("/sMember/kakaoPay/completed")
+    public ResponseEntity<?>  kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
+        ApproveRequestPayDto approveRequestPayDto = kakaoPayService.payApprove(pg_token);
+        if(approveRequestPayDto!=null){
+            //스폰 내역 저장
+            sponService.applySpon(approveRequestPayDto.getTid(), approveRequestPayDto.getPartner_user_id());
             return ResponseEntity.status(HttpStatus.OK).body("결제 완료");
         }else{
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("결제 실패");

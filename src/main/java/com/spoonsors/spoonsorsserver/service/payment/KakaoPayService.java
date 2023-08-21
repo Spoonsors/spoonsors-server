@@ -5,6 +5,7 @@ import com.spoonsors.spoonsorsserver.entity.Spon;
 import com.spoonsors.spoonsorsserver.entity.payment.ApproveRequestPayDto;
 import com.spoonsors.spoonsorsserver.entity.payment.RequestPayDto;
 import com.spoonsors.spoonsorsserver.repository.ISponRepository;
+import com.spoonsors.spoonsorsserver.repository.SponRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -26,12 +27,12 @@ public class KakaoPayService {
     private ApproveRequestPayDto approveRequestPayDto;
     private RequestPayDto requestPayDto;
     private final ISponRepository iSponRepository;
+    private final SponRepository sponRepository;
 
     public String payReady(String SMemberId, Long spon_id) {
         Optional<Spon> optionalSpon= iSponRepository.findById(spon_id);
         Spon spon = optionalSpon.get();
         Ingredients ingredients = spon.getIngredients();
-        String approval_url="http://localhost:8080/sMember/kakaoPay/completed/"+spon_id+"/"+SMemberId;
         // 카카오가 요구한 결제요청request값을 담아줍니다.
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         parameters.add("cid", "TC0ONETIME"); //가맹점 코드. 10자 실제 제휴 후 받아야함
@@ -41,9 +42,9 @@ public class KakaoPayService {
         parameters.add("quantity", "1");
         parameters.add("total_amount",ingredients.getPrice().toString());
         parameters.add("tax_free_amount", "0");
-        parameters.add("approval_url", approval_url); // 결제승인시 넘어갈 url
-        parameters.add("cancel_url", "http://localhost:8080/sMember/kakaoPay/cancel"); // 결제취소시 넘어갈 url
-        parameters.add("fail_url", "http://localhost:8080/sMember/kakaoPay/fail"); // 결제 실패시 넘어갈 url
+        parameters.add("approval_url", "http://15.165.106.139:8080/sMember/kakaoPay/completed"); // 결제승인시 넘어갈 url
+        parameters.add("cancel_url", "http://15.165.106.139:8080/sMember/kakaoPay/cancel"); // 결제취소시 넘어갈 url
+        parameters.add("fail_url", "http://15.165.106.139:8080/sMember/kakaoPay/fail"); // 결제 실패시 넘어갈 url
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
         // 외부url요청 통로 열기.
@@ -53,7 +54,13 @@ public class KakaoPayService {
 
             requestPayDto  = template.postForObject(url, requestEntity, RequestPayDto.class);
 
-            return requestPayDto != null ? requestPayDto.getNext_redirect_app_url() : null;
+            if(requestPayDto !=null){
+                requestPayDto.setSMemberId(SMemberId);
+                sponRepository.putTid(spon_id, requestPayDto.getTid());
+                return requestPayDto.getNext_redirect_app_url();
+            }
+
+            return null;
 
         } catch (RestClientException e) {
             e.printStackTrace();
@@ -63,13 +70,13 @@ public class KakaoPayService {
     }
 
     // 결제 승인요청 메서드
-    public ApproveRequestPayDto payApprove( String pgToken, String SMemberId) {
+    public ApproveRequestPayDto payApprove( String pgToken) {
 
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         parameters.add("cid", "TC0ONETIME"); //가맹점 코드. 10자 실제 제휴 후 받아야함
         parameters.add("tid", requestPayDto.getTid()); //결제 고유번호
         parameters.add("partner_order_id", "partner_order_id"); // 가맹점 주문번호, 결제 준비 api요청과 일치 필요
-        parameters.add("partner_user_id", SMemberId ); //가맹점 회원 id, 결제 준비 api 요청과 일치
+        parameters.add("partner_user_id", requestPayDto.getSMemberId() ); //가맹점 회원 id, 결제 준비 api 요청과 일치
         parameters.add("pg_token", pgToken);
 
         // 하나의 map안에 header와 parameter값을 담아줌.

@@ -13,4 +13,5 @@ public class RequestPayDto {
     private String tid;
     private String next_redirect_app_url;
     private Date created_at;
+    private String SMemberId;
 }
