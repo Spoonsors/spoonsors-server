@@ -10,14 +10,12 @@ import com.spoonsors.spoonsorsserver.repository.BMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.ISMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.IbMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.SMemberRepository;
-import com.spoonsors.spoonsorsserver.service.authorize.SmsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
@@ -81,7 +79,7 @@ public class JoinService {
 
             String sb = "grant_type=authorization_code" +
                     "&client_id=03bbdf71352156f08fd91cdbd4b861e1" + // REST_API키
-                    "&redirect_uri=http://3.86.110.15:8080/join/kakao" + // REDIRECT_URI
+                    "&redirect_uri=http://15.165.106.139:8080/join/kakao" + // REDIRECT_URI
                     "&code=" + authorize_code;
             bw.write(sb);
             bw.flush();
@@ -114,7 +112,7 @@ public class JoinService {
     }
 
     //카카오톡 유저 정보 가져오기
-    public HashMap<String, String> getUserInfo(String access_Token) throws Throwable {
+    public HashMap<String, String> getUserInfo(String access_Token){
         HashMap<String, String> userInfo = new HashMap<>();
         String reqURL = "https://kapi.kakao.com/v2/user/me";
 
@@ -129,17 +127,17 @@ public class JoinService {
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
             String line = "";
-            String result = "";
+            StringBuilder result = new StringBuilder();
 
             while ((line = br.readLine()) != null) {
-                result += line;
+                result.append(line);
             }
 
             try {
 
                 ObjectMapper objectMapper = new ObjectMapper();
 
-                Map<String, Object> jsonMap = objectMapper.readValue(result, new TypeReference<>() {
+                Map<String, Object> jsonMap = objectMapper.readValue(result.toString(), new TypeReference<>() {
                 });
 
                 System.out.println(jsonMap.get("properties"));
@@ -150,11 +148,10 @@ public class JoinService {
 
                 String nickname = properties.get("nickname").toString();
                 String email = kakao_account.get("email").toString();
-                String profile_image = properties.get("profile_image").toString();
 
                 userInfo.put("nickname", nickname);
                 userInfo.put("email", email);
-                userInfo.put("profile_image", profile_image);
+
 
             } catch (Exception e) {
                 e.printStackTrace();

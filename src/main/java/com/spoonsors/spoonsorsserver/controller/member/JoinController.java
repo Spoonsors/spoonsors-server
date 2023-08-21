@@ -35,6 +35,7 @@ public class JoinController {
         return txt;
     }
 
+
     //카카오 로그인으로 회원가입 및 로그인
     @GetMapping("/join/kakao")
     public String kakaoLogin(@RequestParam String code) throws Throwable {
@@ -44,6 +45,7 @@ public class JoinController {
 
         return joinService.loginOrJoin(info);
     }
+
     // 아이디 찾기(이름 번호 match)
     @PostMapping("/join/matchId")
     public String findId(HttpServletRequest request, @RequestBody Map<String,String> find) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {

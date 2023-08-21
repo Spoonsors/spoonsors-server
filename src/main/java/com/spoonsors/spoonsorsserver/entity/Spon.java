@@ -36,4 +36,6 @@ public class Spon {
 
     @ColumnDefault("0")
     private Integer spon_state; // 디폴트 설정
+
+    private String tid; //결제 고유 번호
 }

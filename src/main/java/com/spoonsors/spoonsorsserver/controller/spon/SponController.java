@@ -20,6 +20,7 @@ import java.util.List;
 public class SponController {
     private final SponService sponService;
 
+    /*
     //후원 신청
     @PostMapping("/applySpon/{spon_id}/{sMemberId}")
     public ResponseEntity<?> applySpon(@PathVariable Long spon_id, @PathVariable String sMemberId){
@@ -33,6 +34,8 @@ public class SponController {
         }
         return result;
     }
+
+     */
 
     //후원 내역 조회
     @GetMapping("/getSponList/{sMemberId}")
