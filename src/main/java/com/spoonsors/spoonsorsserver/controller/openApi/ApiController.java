@@ -38,8 +38,8 @@ public class ApiController {
     }
     //밥, 반찬, 국&찌개
     @GetMapping("/recipe/classification")
-    public List<ApiDto> classification(@RequestParam String RCP_PAT2) throws IOException{
-
+    public List<ApiDto> classification(@RequestParam String RCP_PAT2) throws Exception {
+        log.info("RRCP_PAT2={}",RCP_PAT2);
         return apiService.classification(RCP_PAT2);
     }
 

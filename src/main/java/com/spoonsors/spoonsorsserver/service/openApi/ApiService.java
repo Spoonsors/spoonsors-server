@@ -46,15 +46,20 @@ public class ApiService {
         return init(urlStr);
     }
     // 밥, 국&찌개 반찬 검색
-    public List<ApiDto> classification(String RCP_PAT2) throws IOException{
-
+    public List<ApiDto> classification(String RCP_PAT2) throws Exception {
+        log.info("RCP_PAT2={}",RCP_PAT2);
         String urlStr;
         if(Objects.equals(RCP_PAT2, "반찬")) {
             urlStr = "http://openapi.foodsafetykorea.go.kr/api/" +
-                    serviceKey + "/" + serviceId + "/json/" + "1/10/RCP_PAT2=" + RCP_PAT2;
-        }else{
+                    serviceKey + "/" + serviceId + "/json/" + "11/20/RCP_PAT2=" + RCP_PAT2;
+        }else if(Objects.equals(RCP_PAT2, "밥")){
             urlStr = "http://openapi.foodsafetykorea.go.kr/api/" +
                     serviceKey + "/" + serviceId + "/json/" + "1/5/RCP_PAT2=" + RCP_PAT2;
+        }else if(Objects.equals(RCP_PAT2, "국") || Objects.equals(RCP_PAT2, "찌개")){
+            urlStr = "http://openapi.foodsafetykorea.go.kr/api/" +
+                    serviceKey + "/" + serviceId + "/json/" + "6/10/RCP_PAT2=" + RCP_PAT2;
+        }else{
+            throw new Exception("잘 못 입력했습니다.");
         }
         return init(urlStr);
 
@@ -139,8 +144,6 @@ public class ApiService {
                 menuList.add(apiDto);
 
 
-            for(int k=0;k<i;k++){
-            }
             }
         }
         catch (Exception e){
