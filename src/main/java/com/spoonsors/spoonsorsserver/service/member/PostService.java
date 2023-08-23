@@ -68,7 +68,7 @@ public class PostService {
 
     //글 상태 변경
     public String changePostState(Long post_id){
-        postRepository.changeState(post_id);
-        return "변경 완료";
+
+        return postRepository.changeState(post_id);
     }
 }
