@@ -17,9 +17,17 @@ public class PostRepository {
         post.setRemain_spon(post.getRemain_spon()-1);
     }
 
-    public void changeState(Long post_id){
+    public String changeState(Long post_id){
         Post post = em.find(Post.class, post_id);
-        post.setPost_state(1);
+        if(post.getPost_state()==1 && post.getHas_review()==0){
+            post.setPost_state(0);
+            return "글 마감 취소 완료";
+        }else if(post.getPost_state()==1 && post.getHas_review()==1){
+            return "글 마감 취소 불가 - 등록된 리뷰가 있습니다.";
+        }else{
+            post.setPost_state(1);
+            return "글 마감 완료";
+        }
     }
 
     public void changeReviewState(Long post_id){

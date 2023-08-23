@@ -51,13 +51,13 @@ public class ApiService {
         String urlStr;
         if(Objects.equals(RCP_PAT2, "반찬")) {
             urlStr = "http://openapi.foodsafetykorea.go.kr/api/" +
-                    serviceKey + "/" + serviceId + "/json/" + "11/20/RCP_PAT2=" + RCP_PAT2;
+                    serviceKey + "/" + serviceId + "/json/" + "1/20/RCP_PAT2=" + RCP_PAT2;
         }else if(Objects.equals(RCP_PAT2, "밥")){
             urlStr = "http://openapi.foodsafetykorea.go.kr/api/" +
                     serviceKey + "/" + serviceId + "/json/" + "1/5/RCP_PAT2=" + RCP_PAT2;
         }else if(Objects.equals(RCP_PAT2, "국") || Objects.equals(RCP_PAT2, "찌개")){
             urlStr = "http://openapi.foodsafetykorea.go.kr/api/" +
-                    serviceKey + "/" + serviceId + "/json/" + "6/10/RCP_PAT2=" + RCP_PAT2;
+                    serviceKey + "/" + serviceId + "/json/" + "1/10/RCP_PAT2=" + RCP_PAT2;
         }else{
             throw new Exception("잘 못 입력했습니다.");
         }
