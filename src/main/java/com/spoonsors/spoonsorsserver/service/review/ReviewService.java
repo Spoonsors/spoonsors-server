@@ -32,12 +32,13 @@ public class ReviewService {
 
     //리뷰 작성
     public Review writeReview(Long postId, String reviewTxt, String img)throws IOException {
+
         Date date = new Date();
 
         Optional<Post> optionalPost =iPostRepository.findById(postId);
         Post post = optionalPost.get();
-
-        ReviewDto reviewDto=new ReviewDto();
+        if(post.getPost_state() == 0) {throw new IOException("후원 마감되지 않은 글은 리뷰 작성 불가능 합니다.");}
+        ReviewDto reviewDto = new ReviewDto();
         reviewDto.setReview_txt(reviewTxt);
         reviewDto.setPost(post);
         reviewDto.setReview_date(date);
@@ -49,6 +50,7 @@ public class ReviewService {
         postRepository.changeReviewState(postId);
         postRepository.canPost(post.getBMember().getBMember_id());
         return addRreview;
+
     }
 
     // 내가 작성한 리뷰 확인

@@ -45,7 +45,7 @@ public class Post {
     @Column( nullable = false) //datetime
     private Date post_date;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = {CascadeType.REMOVE})
     private List<Spon> spon = new ArrayList<>();
 
     @ColumnDefault("0")
