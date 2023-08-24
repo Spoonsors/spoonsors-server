@@ -28,7 +28,7 @@ public class PostController {
     }
 
     //후원 글 삭제
-    @DeleteMapping("/bMember/post/{postId}")
+    @DeleteMapping("/bMember/deletePost/{postId}")
     public String deletePost(@PathVariable Long postId) throws IOException {
         postService.delete(postId);
         return postId + "번 post 삭제 완료";

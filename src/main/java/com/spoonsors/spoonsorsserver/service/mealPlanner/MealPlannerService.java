@@ -43,7 +43,6 @@ public class MealPlannerService {
         updateMealPlanner.setFat(mealPlanner.getFat());
         updateMealPlanner.setNa(mealPlanner.getNa());
         updateMealPlanner.setLevel(mealPlanner.getLevel());
-        updateMealPlanner.setTimeRequired(mealPlanner.getTimeRequired());
 
         return updateMealPlanner.getMealPlanner_id();
     }
