@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -20,12 +21,18 @@ public class PostController {
 
     //후원 글 작성
     @PostMapping("/bMember/post/{bMemberId}")
-    public String writePost(@PathVariable String bMemberId, @RequestBody WritePostDto writePostDto){
+    public String writePost(@PathVariable String bMemberId, @RequestBody WritePostDto writePostDto) throws IOException {
         Post post=postService.writePost(bMemberId, writePostDto);
         sponService.addSpon(writePostDto.getItem_list(), post.getPost_id());
         return "["+post.getPost_id()+"]"+ "\""+post.getPost_title()+"\""+ " 작성 완료";
     }
 
+    //후원 글 삭제
+    @DeleteMapping("/bMember/post/{postId}")
+    public String deletePost(@PathVariable Long postId){
+        postService.delete(postId);
+        return postId + "번 post 삭제 완료";
+    }
     //후원 글 목록 확인
     @GetMapping("/viewPosting")
     public List<Post> viewAllPosts(){
