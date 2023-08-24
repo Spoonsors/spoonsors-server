@@ -24,6 +24,7 @@ public class Review {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
+    @Column(columnDefinition = "TEXT")
     private String review_img;
 
     @Column(length = 400)

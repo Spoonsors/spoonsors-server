@@ -19,25 +19,22 @@ public class MealPlanner {
     @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
     private Long mealPlanner_id;
 
-//    @ManyToMany
-//    @JoinTable(name = "MealPlanner_Menu",
-//            joinColumns = @JoinColumn(name = "mealPlanner_id"),
-//            inverseJoinColumns = @JoinColumn(name = "menu_id"))
-//    private List<Menu> menu = new ArrayList<>();
-
     @Column( nullable = false)
     private String menu_name1;
-    @Column( nullable = false) //mediumblob
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String menu_img1;
 
     private String menu_name2;
+    @Column(columnDefinition = "TEXT")
     private String menu_img2;
 
     private String menu_name3;
+    @Column(columnDefinition = "TEXT")
     private String menu_img3;
 
 
     private String menu_name4;
+    @Column(columnDefinition = "TEXT")
     private String menu_img4;
 
     @Column(length = 100, nullable = false)

@@ -51,7 +51,7 @@ public class Post {
     @ColumnDefault("0")
     private Integer remain_spon;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String menu_img;
 
     private String menu_name;

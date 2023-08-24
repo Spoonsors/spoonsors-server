@@ -27,6 +27,7 @@ public class Fridge {
     @Column( length = 100, nullable = false)
     private String fridge_item_name;
 
+    @Column(columnDefinition = "TEXT")
     private String fridge_item_img;
 
     @Column(nullable = false)
