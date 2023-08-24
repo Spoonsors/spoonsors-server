@@ -29,7 +29,7 @@ public class PostController {
 
     //후원 글 삭제
     @DeleteMapping("/bMember/post/{postId}")
-    public String deletePost(@PathVariable Long postId){
+    public String deletePost(@PathVariable Long postId) throws IOException {
         postService.delete(postId);
         return postId + "번 post 삭제 완료";
     }
@@ -56,7 +56,7 @@ public class PostController {
 
     //글 상태 변경
     @PostMapping("/bMember/changePostState/{postId}")
-    public String changePostState(@PathVariable Long postId){
+    public String changePostState(@PathVariable Long postId) throws IOException {
 
         return postService.changePostState(postId);
     }

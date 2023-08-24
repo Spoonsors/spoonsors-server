@@ -3,10 +3,7 @@ package com.spoonsors.spoonsorsserver.service.member;
 import com.spoonsors.spoonsorsserver.entity.*;
 import com.spoonsors.spoonsorsserver.entity.bMember.ViewPostDto;
 import com.spoonsors.spoonsorsserver.entity.bMember.WritePostDto;
-import com.spoonsors.spoonsorsserver.repository.IPostRepository;
-import com.spoonsors.spoonsorsserver.repository.IReviewRepository;
-import com.spoonsors.spoonsorsserver.repository.IbMemberRepository;
-import com.spoonsors.spoonsorsserver.repository.PostRepository;
+import com.spoonsors.spoonsorsserver.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,21 +24,24 @@ public class PostService {
     private final IReviewRepository iReviewRepository;
     private final PostRepository postRepository;
 
+    private final SponRepository sponRepository;
     //글 작성
     public Post writePost(String bMemberId, WritePostDto writePostDto) throws IOException {
-        if(ibMemberRepository.findById(bMemberId).get().getCan_post() == 1) {
-            Date date = new Date();
-            Optional<BMember> optionalBMember = ibMemberRepository.findById(bMemberId);
-            BMember bMember = optionalBMember.get();
-            writePostDto.setBMember(bMember);
-            writePostDto.setPost_date(date);
-            postRepository.canPost(bMemberId);
-            //글 저장
-            Post post = iPostRepository.save(writePostDto.toEntity());
-            return post;
-        }else{
+        if(ibMemberRepository.findById(bMemberId).get().getIs_verified() == 0){
+            throw new IOException("증명서 인증 후 후원 등록 가능 합니다!");
+        }
+        if(ibMemberRepository.findById(bMemberId).get().getCan_post() == 0) {
             throw new IOException("후원등록 가능 상태가 아닙니다!!");
         }
+        Date date = new Date();
+        Optional<BMember> optionalBMember = ibMemberRepository.findById(bMemberId);
+        BMember bMember = optionalBMember.get();
+        writePostDto.setBMember(bMember);
+        writePostDto.setPost_date(date);
+        postRepository.canPost(bMemberId);
+        //글 저장
+        Post post = iPostRepository.save(writePostDto.toEntity());
+        return post;
 
 
     }
@@ -74,11 +74,39 @@ public class PostService {
     }
 
     //글 상태 변경
-    public String changePostState(Long post_id){
-
-        return postRepository.changeState(post_id);
+    public String changePostState(Long post_id) throws IOException{
+        boolean check = checkSpon(post_id);
+        if(!check){
+            return postRepository.changeState(post_id);
+        }
+        throw new IOException("후원 상품이 없는 글은 마감 불가능합니다.");
     }
 
     //후원글 삭제
-    public void delete(Long post_id){postRepository.delete(post_id);}
+    public void delete(Long post_id) throws IOException{
+        Optional<Post> optionalPost=iPostRepository.findById(post_id);
+        Post post=optionalPost.get();
+        if(post.getPost_state() == 1){
+            throw new IOException("후원 완료된 글은 삭제 불가능 합니다.");
+        }
+        boolean check = checkSpon(post_id);
+        if(check){
+            postRepository.delete(post_id);
+        }else{
+            throw new IOException("후원된 상품이 있는 글은 삭제 불가능 합니다.");
+        }
+
+    }
+
+    public boolean checkSpon(Long post_id){
+        boolean check = true;
+        Optional<Post> optionalPost= iPostRepository.findById(post_id);
+        Post post = optionalPost.get();
+        List<Spon> sponList = sponRepository.checkSpon(post_id);
+
+        if(post.getRemain_spon() != sponList.size()){
+            check = false;
+        }
+        return check;
+    }
 }
