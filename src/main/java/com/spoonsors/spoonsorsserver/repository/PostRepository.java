@@ -1,5 +1,7 @@
 package com.spoonsors.spoonsorsserver.repository;
 
+import com.spoonsors.spoonsorsserver.entity.BMember;
+import com.spoonsors.spoonsorsserver.entity.Ingredients;
 import com.spoonsors.spoonsorsserver.entity.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -30,8 +32,28 @@ public class PostRepository {
         }
     }
 
+    public void canPost(String bMemberId){
+        BMember bMember = em.find(BMember.class, bMemberId);
+        if(bMember.getCan_post()==0){
+            bMember.setCan_post(1);
+        }else{
+            bMember.setCan_post(0);
+        }
+    }
+
     public void changeReviewState(Long post_id){
         Post post = em.find(Post.class, post_id);
         post.setHas_review(1);
+    }
+
+    public void delete(Long postId){
+        Post post = em.find(Post.class, postId);
+        canPost(post.getBMember().getBMember_id());
+        em.remove(findById(postId));
+    }
+
+    // post id값으로 조회
+    public Post findById(Long postId) {
+        return em.find(Post.class, postId);
     }
 }

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -27,16 +28,22 @@ public class PostService {
     private final PostRepository postRepository;
 
     //글 작성
-    public Post writePost(String bMemberId, WritePostDto writePostDto){
-        Date date = new Date();
-        Optional<BMember> optionalBMember =ibMemberRepository.findById(bMemberId);
-        BMember bMember = optionalBMember.get();
-        writePostDto.setBMember(bMember);
-        writePostDto.setPost_date(date);
-        //글 저장
-        Post post=iPostRepository.save(writePostDto.toEntity());
+    public Post writePost(String bMemberId, WritePostDto writePostDto) throws IOException {
+        if(ibMemberRepository.findById(bMemberId).get().getCan_post() == 1) {
+            Date date = new Date();
+            Optional<BMember> optionalBMember = ibMemberRepository.findById(bMemberId);
+            BMember bMember = optionalBMember.get();
+            writePostDto.setBMember(bMember);
+            writePostDto.setPost_date(date);
+            postRepository.canPost(bMemberId);
+            //글 저장
+            Post post = iPostRepository.save(writePostDto.toEntity());
+            return post;
+        }else{
+            throw new IOException("후원등록 가능 상태가 아닙니다!!");
+        }
 
-        return post;
+
     }
 
     //전체 글 조회
@@ -71,4 +78,7 @@ public class PostService {
 
         return postRepository.changeState(post_id);
     }
+
+    //후원글 삭제
+    public void delete(Long post_id){postRepository.delete(post_id);}
 }
