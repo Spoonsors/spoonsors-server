@@ -51,6 +51,4 @@ public class MealPlanner {
     @Column(length = 10)
     private String level;
 
-    @Temporal(value = TemporalType.TIME)
-    private Date timeRequired;
 }
