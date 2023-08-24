@@ -47,7 +47,7 @@ public class ReviewService {
         addRreview.setReview_img(img);
 
         postRepository.changeReviewState(postId);
-
+        postRepository.canPost(post.getBMember().getBMember_id());
         return addRreview;
     }
 
