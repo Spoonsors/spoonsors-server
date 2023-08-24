@@ -25,6 +25,7 @@ public class Ingredients {
     @Column(length = 100)
     private String product_name;
 
+    @Column(columnDefinition = "TEXT")
     private String ingredients_image;
 
     @Column(nullable = false)
