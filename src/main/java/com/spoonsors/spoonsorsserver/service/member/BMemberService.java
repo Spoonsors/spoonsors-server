@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -79,5 +80,10 @@ public class BMemberService {
 
     public void putToken(Map<String, String> token){
         bMemberRepository.putToken(token);
+    }
+
+    public int canPost(String bMemberId){
+        Optional<BMember> optionalBMember = ibMemberRepository.findById(bMemberId);
+        return optionalBMember.get().getCan_post();
     }
 }
