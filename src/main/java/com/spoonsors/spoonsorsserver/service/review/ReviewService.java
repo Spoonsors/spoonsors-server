@@ -1,25 +1,18 @@
 package com.spoonsors.spoonsorsserver.service.review;
 
-import ch.qos.logback.core.joran.spi.ConsoleTarget;
 import com.spoonsors.spoonsorsserver.customException.ApiException;
 import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
-import com.spoonsors.spoonsorsserver.entity.BMember;
-import com.spoonsors.spoonsorsserver.entity.Post;
-import com.spoonsors.spoonsorsserver.entity.Review;
+import com.spoonsors.spoonsorsserver.entity.*;
+import com.spoonsors.spoonsorsserver.entity.review.GetReviewDto;
 import com.spoonsors.spoonsorsserver.entity.review.ReviewDto;
 import com.spoonsors.spoonsorsserver.repository.*;
-import com.spoonsors.spoonsorsserver.service.ImageUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -30,6 +23,7 @@ public class ReviewService {
     private final IReviewRepository iReviewRepository;
     private final IPostRepository iPostRepository;
     private final IbMemberRepository ibMemberRepository;
+    private final ISMemberRepository isMemberRepository;
     private final PostRepository postRepository;
 
     //리뷰 작성
@@ -70,5 +64,37 @@ public class ReviewService {
             }
         }
         return myReviewList;
+    }
+
+    //내가 받은 리뷰 확인(내가 후원한 글의 리뷰)
+    public Set<GetReviewDto> getSponReviewList(String sMemberId){
+        Optional<SMember> optionalSMember = isMemberRepository.findById(sMemberId);
+        SMember sMember=optionalSMember.get();
+        List<Spon> spon = sMember.getSpons();
+        Set<GetReviewDto> set = new HashSet<>();
+        Set<Long> idSet = new HashSet<>();
+
+        for (Spon s : spon) {
+            Post post=s.getPost();
+            Long postId=post.getPost_id();
+            if(!idSet.contains(postId)) { //리턴 리스트에 해당 포스트가 존재하지 않는다면 추가
+                if(post.getHas_review()==1){ //해당 포스트가 리뷰를 가지고 있다면
+                    Optional<Review> optionalReview =iReviewRepository.findById(postId);
+                    Review review = optionalReview.get();
+                    GetReviewDto getReviewDto = new GetReviewDto();
+                    getReviewDto.setPost_id(postId);
+                    getReviewDto.setReview_img(review.getReview_img());
+                    getReviewDto.setReview_txt(review.getReview_txt());
+                    getReviewDto.setWrite_date(review.getReview_date());
+                    getReviewDto.setWriter_nickname(post.getBMember().getBMember_nickname());
+                    set.add(getReviewDto);
+                    idSet.add(postId);
+                }
+
+            }
+
+        }
+
+        return set;
     }
 }

@@ -1,6 +1,7 @@
 package com.spoonsors.spoonsorsserver.controller.review;
 
 import com.spoonsors.spoonsorsserver.entity.Review;
+import com.spoonsors.spoonsorsserver.entity.review.GetReviewDto;
 import com.spoonsors.spoonsorsserver.entity.review.ReviewDto;
 import com.spoonsors.spoonsorsserver.service.Image.S3Uploader;
 import com.spoonsors.spoonsorsserver.service.review.ReviewService;
@@ -13,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.PersistenceException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -47,4 +50,10 @@ public class ReviewController {
         return myReview;
     }
 
+    // 내가 받은 리뷰 확인(후원자)
+    @GetMapping("/sMember/receivedReview/{sMemberId}")
+    public Set<GetReviewDto> getReview(@PathVariable String sMemberId){
+
+        return reviewService.getSponReviewList(sMemberId);
+    }
 }
