@@ -40,9 +40,9 @@ public class ManagerRepository {
 
     // 식재료 이름으로 조회
     public Optional<Ingredients> findByName(String findName){
-        return Optional.ofNullable(em.createQuery("SELECT u FROM Ingredients u WHERE u.ingredients_name = :findName", Ingredients.class)
+        return em.createQuery("SELECT u FROM Ingredients u WHERE u.ingredients_name = :findName", Ingredients.class)
                 .setParameter("findName", findName)
-                .getSingleResult());
+                .getResultList().stream().findAny();
     }
 
 }
