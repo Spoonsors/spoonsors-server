@@ -64,7 +64,7 @@ public class SMemberService {
 
         SMember sMember = isMemberRepository.findById(members.get("id"))
                 .filter(it -> encoder.matches(members.get("pwd"), it.getSMember_pwd()))   // 암호화된 비밀번호와 비교하도록 수정
-                .orElseThrow(() -> new ApiException(ExceptionEnum.LOGIN05); //아이디와 비밀번호 불일치
+                .orElseThrow(() -> new ApiException(ExceptionEnum.LOGIN05)); //아이디와 비밀번호 불일치
 
 
         List<String> roles = new ArrayList<>();
@@ -75,6 +75,7 @@ public class SMemberService {
         loginDto.setMember_name(sMember.getSMember_name());
         loginDto.setMember_nickname(sMember.getSMember_nickname());
         loginDto.setMember_phoneNumber(sMember.getSMember_phoneNumber());
+        loginDto.setMember_profilePath((sMember.getProfile_path()));
         loginDto.setToken(jwtTokenProvider.createToken(sMember.getSMember_id(), roles));
         return loginDto;
     }

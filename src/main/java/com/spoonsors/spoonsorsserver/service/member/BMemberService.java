@@ -66,7 +66,7 @@ public class BMemberService {
     public LoginDto login(Map<String, String> members) {
         BMember bMember = ibMemberRepository.findById(members.get("id"))
                 .filter(it -> encoder.matches(members.get("pwd"), it.getBMember_pwd()))   // 암호화된 비밀번호와 비교하도록 수정
-                .orElseThrow(() -> new ApiException(ExceptionEnum.LOGIN05); //아이디와 비밀번호 불일치
+                .orElseThrow(() -> new ApiException(ExceptionEnum.LOGIN05)); //아이디와 비밀번호 불일치
 
         List<String> roles = new ArrayList<>();
         roles.add(bMember.getRole().name());
@@ -77,6 +77,7 @@ public class BMemberService {
         loginDto.setMember_nickname(bMember.getBMember_nickname());
         loginDto.setMember_address(bMember.getBMember_address());
         loginDto.setMember_phoneNumber(bMember.getBMember_phoneNumber());
+        loginDto.setMember_profilePath((bMember.getProfile_path()));
         loginDto.setToken(jwtTokenProvider.createToken(bMember.getBMember_id(), roles));
         return loginDto;
     }
