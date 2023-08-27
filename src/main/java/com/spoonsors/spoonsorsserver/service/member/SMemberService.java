@@ -1,5 +1,7 @@
 package com.spoonsors.spoonsorsserver.service.member;
 
+import com.spoonsors.spoonsorsserver.customException.ApiException;
+import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
 import com.spoonsors.spoonsorsserver.entity.SMember;
 import com.spoonsors.spoonsorsserver.entity.login.LoginDto;
 import com.spoonsors.spoonsorsserver.entity.sMember.SMemberSignUpDto;
@@ -33,20 +35,22 @@ public class SMemberService {
     private final PasswordEncoder encoder;
     public String signUp(SMemberSignUpDto requestDto) throws Exception {
 
+        //존재하는 아이디
         if (isMemberRepository.findById(requestDto.getId()).isPresent()){
-            throw new Exception("이미 존재하는 아이디입니다.");
+            throw new ApiException(ExceptionEnum.JOIN01);
         }
         if (ibMemberRepository.findById(requestDto.getId()).isPresent()){
-            throw new Exception("이미 존재하는 아이디입니다.");
+            throw new ApiException(ExceptionEnum.JOIN01);
         }
+        //존재하는 닉네임
         if (bMemberRepository.findByNickname(requestDto.getNickname()).isPresent()){
-            throw new Exception("이미 존재하는 닉네임입니다.");
+            throw new ApiException(ExceptionEnum.JOIN02);
         }
         if (sMemberRepository.findByNickname(requestDto.getNickname()).isPresent()){
-            throw new Exception("이미 존재하는 닉네임입니다.");
+            throw new ApiException(ExceptionEnum.JOIN02);
         }
         if (!requestDto.getPwd().equals(requestDto.getPwd_check())){
-            throw new Exception("비밀번호가 일치하지 않습니다.");
+            throw new ApiException(ExceptionEnum.JOIN03);
         }
 
         SMember member = isMemberRepository.save(requestDto.toEntity());
@@ -60,7 +64,7 @@ public class SMemberService {
 
         SMember sMember = isMemberRepository.findById(members.get("id"))
                 .filter(it -> encoder.matches(members.get("pwd"), it.getSMember_pwd()))   // 암호화된 비밀번호와 비교하도록 수정
-                .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 일치하지 않습니다."));
+                .orElseThrow(() -> new ApiException(ExceptionEnum.LOGIN05); //아이디와 비밀번호 불일치
 
 
         List<String> roles = new ArrayList<>();

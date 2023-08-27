@@ -1,5 +1,7 @@
 package com.spoonsors.spoonsorsserver.service.member;
 
+import com.spoonsors.spoonsorsserver.customException.ApiException;
+import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
 import com.spoonsors.spoonsorsserver.entity.BMember;
 import com.spoonsors.spoonsorsserver.entity.bMember.BMemberSignUpDto;
 import com.spoonsors.spoonsorsserver.entity.login.LoginDto;
@@ -33,29 +35,30 @@ public class BMemberService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder encoder;
-    public String signUp(BMemberSignUpDto requestDto, String img) throws Exception {
+    public String signUp(BMemberSignUpDto requestDto, String img){
 
-
+        //이미 존재하는 아이디
         if (ibMemberRepository.findById(requestDto.getId()).isPresent()){
-            throw new Exception("이미 존재하는 아이디입니다.");
+            throw new ApiException(ExceptionEnum.JOIN01);
         }
         if (isMemberRepository.findById(requestDto.getId()).isPresent()){
-            throw new Exception("이미 존재하는 아이디입니다.");
+            throw new ApiException(ExceptionEnum.JOIN01);
         }
+        //이미 존재하는 닉네임
         if (bMemberRepository.findByNickname(requestDto.getNickname()).isPresent()){
-            throw new Exception("이미 존재하는 닉네임입니다.");
+            throw new ApiException(ExceptionEnum.JOIN02);
         }
         if (sMemberRepository.findByNickname(requestDto.getNickname()).isPresent()){
-            throw new Exception("이미 존재하는 닉네임입니다.");
+            throw new ApiException(ExceptionEnum.JOIN02);
         }
+        //비밀번호 불일치
         if (!requestDto.getPwd().equals(requestDto.getPwd_check())){
-            throw new Exception("비밀번호가 일치하지 않습니다.");
+            throw new ApiException(ExceptionEnum.JOIN03);
         }
         requestDto.setCertificate(img);
         BMember member = ibMemberRepository.save(requestDto.toEntity());
         member.encodePassword(passwordEncoder);
 
-        //member.addUserAuthority();
         return member.getBMember_id();
     }
 
@@ -63,7 +66,7 @@ public class BMemberService {
     public LoginDto login(Map<String, String> members) {
         BMember bMember = ibMemberRepository.findById(members.get("id"))
                 .filter(it -> encoder.matches(members.get("pwd"), it.getBMember_pwd()))   // 암호화된 비밀번호와 비교하도록 수정
-                .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 일치하지 않습니다."));
+                .orElseThrow(() -> new ApiException(ExceptionEnum.LOGIN05); //아이디와 비밀번호 불일치
 
         List<String> roles = new ArrayList<>();
         roles.add(bMember.getRole().name());

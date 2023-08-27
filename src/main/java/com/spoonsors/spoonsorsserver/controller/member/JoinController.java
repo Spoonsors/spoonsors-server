@@ -1,6 +1,8 @@
 package com.spoonsors.spoonsorsserver.controller.member;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.spoonsors.spoonsorsserver.customException.ApiException;
+import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
 import com.spoonsors.spoonsorsserver.entity.authorize.MessageDto;
 import com.spoonsors.spoonsorsserver.service.authorize.SmsService;
 import com.spoonsors.spoonsorsserver.service.member.JoinService;
@@ -57,7 +59,7 @@ public class JoinController {
         String verify;
         verify = smsService.verifySms(request.getSession(),verification.get("phoneNum"), verification.get("code"));
         if(verify == null) {
-            return "인증번호가 맞지 않습니다.";
+            throw new ApiException(ExceptionEnum.AUTHORIZE01); //인증번호 불일치
         }else{
             verify = joinService.verifyFindId(verification.get("name"),verification.get("phoneNum"));
             request.getSession().invalidate();
@@ -78,7 +80,7 @@ public class JoinController {
         String verify;
         verify = smsService.verifySms(request.getSession(),verification.get("phoneNum"), verification.get("code"));
         if(verify == null) {
-            return "인증번호가 맞지 않습니다.";
+            throw new ApiException(ExceptionEnum.AUTHORIZE01); //인증번호 불일치
         }else{
             verify = "인증완료 되었습니다.";
             request.getSession().invalidate();
@@ -91,7 +93,7 @@ public class JoinController {
         String result;
         result = joinService.changePwd(verification);
         if(result == null){
-            return "비밀번호 변경 실패";
+            throw new ApiException(ExceptionEnum.LOGIN04); //아이디 비번 불일치
         }else {
             return result;
         }
