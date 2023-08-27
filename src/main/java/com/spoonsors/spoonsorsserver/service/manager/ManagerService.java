@@ -1,19 +1,16 @@
 package com.spoonsors.spoonsorsserver.service.manager;
 
+import com.spoonsors.spoonsorsserver.customException.ApiException;
+import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
 import com.spoonsors.spoonsorsserver.entity.BMember;
 import com.spoonsors.spoonsorsserver.entity.Ingredients;
 import com.spoonsors.spoonsorsserver.entity.manager.CertificateDto;
 import com.spoonsors.spoonsorsserver.entity.manager.IngredientsDto;
 import com.spoonsors.spoonsorsserver.repository.*;
-import com.spoonsors.spoonsorsserver.service.ImageUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +27,15 @@ public class ManagerService {
     private final IbMemberRepository ibMemberRepository;
     private final IManagerRepository iManagerRepository;
     private final IIngredientsRepository iIngredientsRepository;
+    private final SponRepository SponRepository;
 
     //식재료 등록
     public Ingredients regist(IngredientsDto ingredientsDto, String img) throws IOException {
+        if(managerRepository.findByName(ingredientsDto.getIngredientsName()).isPresent()){
+            //등록된 식재료일 시 에러
+            throw new ApiException(ExceptionEnum.MANAGER01);
+        }
         Ingredients addIngredientItem = iManagerRepository.save(ingredientsDto.toEntity());
-
-
         addIngredientItem.setIngredients_image(img);
         return addIngredientItem;
     }
@@ -47,7 +47,12 @@ public class ManagerService {
 
     //name으로 식재료 검색
     public Ingredients findByName(String name){
-        return managerRepository.findByName(name);
+        if(managerRepository.findByName(name).isPresent()) {
+            return managerRepository.findByName(name).get();
+        }else{
+            //검색한 이름의 식재료가 없을 시 에러
+            throw new ApiException(ExceptionEnum.MANAGER03);
+        }
     }
 
     //식재료 수정
@@ -66,6 +71,10 @@ public class ManagerService {
 
     // 식재료 삭제
     public void remove(Long ingredients_id){
+        if(SponRepository.findByIid(ingredients_id).isPresent()){
+            //후원 등록되어 있는 식재료 일시 에러
+            throw new ApiException(ExceptionEnum.MANAGER02);
+        }
         managerRepository.remove(ingredients_id);
     }
 

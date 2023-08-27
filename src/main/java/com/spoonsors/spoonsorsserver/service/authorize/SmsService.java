@@ -2,6 +2,8 @@ package com.spoonsors.spoonsorsserver.service.authorize;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spoonsors.spoonsorsserver.customException.ApiException;
+import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
 import com.spoonsors.spoonsorsserver.entity.authorize.MessageDto;
 import com.spoonsors.spoonsorsserver.entity.authorize.SmsRequestDto;
 import com.spoonsors.spoonsorsserver.entity.authorize.SmsResponseDto;
@@ -145,7 +147,8 @@ public class SmsService {
     }
     public String verifySms(HttpSession session, String phoneNum,String verificationCode){
         if(!isValidToken(session,phoneNum,verificationCode)){
-            return null;
+            // 인증 번호 맞지 않을 시 에러
+            throw new ApiException(ExceptionEnum.AUTHORIZE01);
         }
         return "인증완료 되었습니다.";
     }

@@ -1,5 +1,7 @@
 package com.spoonsors.spoonsorsserver.service.spon;
 
+import com.spoonsors.spoonsorsserver.customException.ApiException;
+import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
 import com.spoonsors.spoonsorsserver.entity.Ingredients;
 import com.spoonsors.spoonsorsserver.entity.Post;
 import com.spoonsors.spoonsorsserver.entity.SMember;
@@ -31,7 +33,7 @@ public class SponService {
     //후원 요청(자립준비청년)
     public void addSpon(List<String> itemlist, Long postId){
         for (String s : itemlist) {
-            Ingredients ingredient = managerRepository.findByName(s);
+            Ingredients ingredient = managerRepository.findByName(s).get();
             Optional<Post> optionalPost = iPostRepository.findById(postId);
             Post post = optionalPost.get();
 
@@ -85,7 +87,7 @@ public class SponService {
 
         //후원이 완료된 물품일 경우 오류
         if(spon.getSpon_state()!=0){
-            return "이미 후원이 완료된 물품입니다.";
+            throw new ApiException(ExceptionEnum.SPON01);
         }
 
         return "후원 가능";

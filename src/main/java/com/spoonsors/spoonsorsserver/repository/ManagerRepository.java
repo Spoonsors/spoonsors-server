@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -38,10 +39,10 @@ public class ManagerRepository {
     }
 
     // 식재료 이름으로 조회
-    public Ingredients findByName(String findName){
-        return em.createQuery("SELECT u FROM Ingredients u WHERE u.ingredients_name = :findName", Ingredients.class)
+    public Optional<Ingredients> findByName(String findName){
+        return Optional.ofNullable(em.createQuery("SELECT u FROM Ingredients u WHERE u.ingredients_name = :findName", Ingredients.class)
                 .setParameter("findName", findName)
-                .getSingleResult();
+                .getSingleResult());
     }
 
 }

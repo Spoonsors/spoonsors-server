@@ -1,6 +1,8 @@
 package com.spoonsors.spoonsorsserver.service.review;
 
 import ch.qos.logback.core.joran.spi.ConsoleTarget;
+import com.spoonsors.spoonsorsserver.customException.ApiException;
+import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
 import com.spoonsors.spoonsorsserver.entity.BMember;
 import com.spoonsors.spoonsorsserver.entity.Post;
 import com.spoonsors.spoonsorsserver.entity.Review;
@@ -37,7 +39,7 @@ public class ReviewService {
 
         Optional<Post> optionalPost =iPostRepository.findById(postId);
         Post post = optionalPost.get();
-        if(post.getPost_state() == 0) {throw new IOException("후원 마감되지 않은 글은 리뷰 작성 불가능 합니다.");}
+        if(post.getPost_state() == 0) {throw new ApiException(ExceptionEnum.REVIEW01);}
         ReviewDto reviewDto = new ReviewDto();
         reviewDto.setReview_txt(reviewTxt);
         reviewDto.setPost(post);

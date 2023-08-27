@@ -2,6 +2,8 @@ package com.spoonsors.spoonsorsserver.service.openApi;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spoonsors.spoonsorsserver.customException.ApiException;
+import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
 import com.spoonsors.spoonsorsserver.entity.api.ApiDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +61,8 @@ public class ApiService {
             urlStr = "http://openapi.foodsafetykorea.go.kr/api/" +
                     serviceKey + "/" + serviceId + "/json/" + "1/10/RCP_PAT2=" + RCP_PAT2;
         }else{
-            throw new Exception("잘 못 입력했습니다.");
+            // 입력값이 잘 못 되었을 경우 에러
+            throw new ApiException(ExceptionEnum.OPENAPI01);
         }
         return init(urlStr);
 
