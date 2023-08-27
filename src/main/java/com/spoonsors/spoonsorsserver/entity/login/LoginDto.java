@@ -13,6 +13,7 @@ public class LoginDto {
     private String member_name;
     private String member_phoneNumber;
     private String member_address;
+    private String member_profilePath;
     private String token;
 
 }
