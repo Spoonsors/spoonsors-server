@@ -31,4 +31,10 @@ public class SponRepository {
                 .setParameter("postId", postId)
                 .getResultList();
     }
+
+    public Optional<Spon> findByIid(Long iid) {
+        return em.createQuery("SELECT s FROM Spon s WHERE s.ingredients.ingredients_id = :iid", Spon.class)
+                .setParameter("iid", iid)
+                .getResultList().stream().findAny();
+    }
 }

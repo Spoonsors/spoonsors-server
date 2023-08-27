@@ -39,12 +39,7 @@ public class SmsController {
         String verfication;
 
         verfication = smsService.verifySms(request.getSession(),verification.get("phoneNum"), verification.get("code"));
-
-        if(verfication == null) {
-            return "인증번호가 맞지 않습니다.";
-        }else{
             request.getSession().invalidate();
             return verfication;
-        }
     }
 }
