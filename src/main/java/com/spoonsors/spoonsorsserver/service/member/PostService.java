@@ -1,5 +1,7 @@
 package com.spoonsors.spoonsorsserver.service.member;
 
+import com.spoonsors.spoonsorsserver.customException.ApiException;
+import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
 import com.spoonsors.spoonsorsserver.entity.*;
 import com.spoonsors.spoonsorsserver.entity.bMember.ViewPostDto;
 import com.spoonsors.spoonsorsserver.entity.bMember.WritePostDto;
@@ -26,12 +28,12 @@ public class PostService {
 
     private final SponRepository sponRepository;
     //글 작성
-    public Post writePost(String bMemberId, WritePostDto writePostDto) throws IOException {
+    public Post writePost(String bMemberId, WritePostDto writePostDto) {
         if(ibMemberRepository.findById(bMemberId).get().getIs_verified() == 0){
-            throw new IOException("증명서 인증 후 후원 등록 가능 합니다!");
+            throw new ApiException(ExceptionEnum.POST01);
         }
         if(ibMemberRepository.findById(bMemberId).get().getCan_post() == 0) {
-            throw new IOException("후원등록 가능 상태가 아닙니다!!");
+            throw new ApiException(ExceptionEnum.POST02); //후원 등록 가능 상태가 아님
         }
         Date date = new Date();
         Optional<BMember> optionalBMember = ibMemberRepository.findById(bMemberId);
@@ -74,12 +76,13 @@ public class PostService {
     }
 
     //글 상태 변경
-    public String changePostState(Long post_id) throws IOException{
+    public String changePostState(Long post_id) {
         boolean check = checkSpon(post_id);
         if(!check){
             return postRepository.changeState(post_id);
         }
-        throw new IOException("후원 상품이 없는 글은 마감 불가능합니다.");
+        //후원 상품이 없는 글은 마감 불가
+        throw new ApiException(ExceptionEnum.POST03);
     }
 
     //후원글 삭제
@@ -87,13 +90,15 @@ public class PostService {
         Optional<Post> optionalPost=iPostRepository.findById(post_id);
         Post post=optionalPost.get();
         if(post.getPost_state() == 1){
-            throw new IOException("후원 완료된 글은 삭제 불가능 합니다.");
+            //후원 완료된 글은 삭제 불가
+            throw new ApiException(ExceptionEnum.POST04);
         }
         boolean check = checkSpon(post_id);
         if(check){
             postRepository.delete(post_id);
         }else{
-            throw new IOException("후원된 상품이 있는 글은 삭제 불가능 합니다.");
+            //후원이 하나라도 있으면 글 삭제 불가
+            throw new ApiException(ExceptionEnum.POST05);
         }
 
     }

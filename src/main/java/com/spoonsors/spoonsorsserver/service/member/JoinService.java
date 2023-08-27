@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spoonsors.spoonsorsserver.controller.authorize.SmsController;
+import com.spoonsors.spoonsorsserver.customException.ApiException;
+import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
 import com.spoonsors.spoonsorsserver.entity.authorize.MessageDto;
 import com.spoonsors.spoonsorsserver.loginInfra.JwtTokenProvider;
 import com.spoonsors.spoonsorsserver.repository.BMemberRepository;
@@ -40,23 +42,24 @@ public class JoinService {
     private final SmsController smsController;
     private final PasswordEncoder passwordEncoder;
     public String checkId(String id) {
+        //이미 존재하는 아이디
         if (ibMemberRepository.findById(id).isPresent()) {
-            return "이미 존재하는 아이디입니다.";
+            throw new ApiException(ExceptionEnum.JOIN01);
         }
         if (isMemberRepository.findById(id).isPresent()) {
-            return "이미 존재하는 아이디입니다.";
+            throw new ApiException(ExceptionEnum.JOIN01);
         }
 
         return "사용 가능한 아이디입니다.";
     }
 
     public String checkNickname(String nickname) {
-
+        //이미 존재하는 닉네임
         if (bMemberRepository.findByNickname(nickname).isPresent()) {
-            return "이미 존재하는 닉네임입니다.";
+            throw new ApiException(ExceptionEnum.JOIN02);
         }
         if (sMemberRepository.findByNickname(nickname).isPresent()) {
-            return "이미 존재하는 닉네임입니다.";
+            throw new ApiException(ExceptionEnum.JOIN02);
         }
         return "사용 가능한 닉네임입니다.";
     }
@@ -193,7 +196,8 @@ public class JoinService {
                 smsController.sendSms(request, messageDto);
                 return "사용자 확인 완료";
             }
-            return "이름과 번호가 일치하는 아이디가 없습니다.";
+            //이름과 번호가 일치하는 아이디가 없음
+            throw new ApiException(ExceptionEnum.LOGIN01);
         }
     }
 
@@ -209,7 +213,8 @@ public class JoinService {
                 smsController.sendSms(request, messageDto);
                 return "사용자 확인 완료";
             }
-            return "아이디에 이름 또는 번호가 일치하지 않습니다.";
+            //정보 불일치
+            throw new ApiException(ExceptionEnum.LOGIN02);
         }
     }
 
@@ -228,8 +233,8 @@ public class JoinService {
         if (isMemberRepository.findById(id).isPresent()) {
             return isMemberRepository.findById(id).get().getSMember_id();
         }
-
-        return "등록된 아이디가 없습니다.";
+        //등록된 아이디 없음
+        throw new ApiException(ExceptionEnum.LOGIN03);
     }
 
     public String changePwd(Map<String, String> members){
@@ -243,7 +248,8 @@ public class JoinService {
             sMemberRepository.changePwd(members.get("id"),passwordEncoder.encode(members.get("pwd")));
             return "비밀번호 변경 완료";
         }
-        return "비밀번호 변경 실패";
+        //비밀번호 변경 실패
+        throw new ApiException(ExceptionEnum.LOGIN04);
     }
 }
 
