@@ -47,7 +47,7 @@ public class BMember extends BaseTime{
     @Column( length = 100, nullable = false)
     private String bMember_phoneNumber;
 
-    @ColumnDefault("1")// 후원글 작성 가능 1, 불가능 0
+    @ColumnDefault("0")// 후원글 작성 가능 1, 불가능 0 -> 증명서 인증되어야 작성가능
     private Integer can_post;
 
     @JsonIgnore
