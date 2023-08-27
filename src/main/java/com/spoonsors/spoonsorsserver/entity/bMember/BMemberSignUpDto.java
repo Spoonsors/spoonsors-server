@@ -60,7 +60,7 @@ public class BMemberSignUpDto {
                 .token(token)
                 .profile_path(profilePath)
                 .is_verified(0)
-                .can_post(1)
+                .can_post(0)
                 .profile_path(profilePath)
                 .build();
     }

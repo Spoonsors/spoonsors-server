@@ -39,7 +39,7 @@ public class ReviewService {
 
         Optional<Post> optionalPost =iPostRepository.findById(postId);
         Post post = optionalPost.get();
-        if(post.getPost_state() == 0) {throw new ApiException(ExceptionEnum.REVIEW01);}
+        if(post.getPost_state() == 0) {throw new ApiException(ExceptionEnum.REVIEW01);}// 후원 마감되지 않은 글은 리뷰 작성 불가능 합니다.
         ReviewDto reviewDto = new ReviewDto();
         reviewDto.setReview_txt(reviewTxt);
         reviewDto.setPost(post);
