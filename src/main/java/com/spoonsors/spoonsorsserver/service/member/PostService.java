@@ -78,7 +78,10 @@ public class PostService {
     //글 상태 변경
     public String changePostState(Long post_id) {
         boolean check = checkSpon(post_id);
-        if(!check){
+        if(!check){ //후원이 하나 이상 등록
+            if(hasReview(post_id)==1) { //리뷰를 가지고 있으면 글 상태 변경 불가
+                throw new ApiException(ExceptionEnum.POST06);
+            }
             return postRepository.changeState(post_id);
         }
         //후원 상품이 없는 글은 마감 불가
@@ -103,15 +106,22 @@ public class PostService {
 
     }
 
+    //스폰이 하나라도 등록 되어 있는지 확인하는 함수. 하나 이상 등록돼있으면 false, 모두 등록되지 않았으면 true
     public boolean checkSpon(Long post_id){
         boolean check = true;
         Optional<Post> optionalPost= iPostRepository.findById(post_id);
         Post post = optionalPost.get();
         List<Spon> sponList = sponRepository.checkSpon(post_id);
 
-        if(post.getRemain_spon() != sponList.size()){
+        if(post.getRemain_spon() != sponList.size()){ //남은 스폰 수와 등록된 수가 같지 않으면 후원이 하나라도 등록된 것임.
             check = false;
         }
         return check;
+    }
+
+    public int hasReview(Long post_id){
+        Optional<Post> optionalPost= iPostRepository.findById(post_id);
+        Post post = optionalPost.get();
+        return post.getHas_review();
     }
 }

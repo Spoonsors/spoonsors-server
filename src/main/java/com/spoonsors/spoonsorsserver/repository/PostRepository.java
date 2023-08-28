@@ -1,7 +1,6 @@
 package com.spoonsors.spoonsorsserver.repository;
 
 import com.spoonsors.spoonsorsserver.entity.BMember;
-import com.spoonsors.spoonsorsserver.entity.Ingredients;
 import com.spoonsors.spoonsorsserver.entity.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -24,8 +23,6 @@ public class PostRepository {
         if(post.getPost_state()==1 && post.getHas_review()==0){
             post.setPost_state(0);
             return "글 마감 취소 완료";
-        }else if(post.getPost_state()==1 && post.getHas_review()==1){
-            return "글 마감 취소 불가 - 등록된 리뷰가 있습니다.";
         }else{
             post.setPost_state(1);
             return "글 마감 완료";
