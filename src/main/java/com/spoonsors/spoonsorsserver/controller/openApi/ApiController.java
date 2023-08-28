@@ -32,7 +32,7 @@ public class ApiController {
     //이름으로 메뉴 출력
     @GetMapping("/recipe/findByName")
     public List<ApiDto> findByNameApi(@RequestParam String RCP_NM) throws IOException{
-
+        log.info("RCP_NM={}",RCP_NM);
         return apiService.findByName(RCP_NM.replaceAll(" ",""));
 
     }
