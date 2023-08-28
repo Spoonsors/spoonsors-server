@@ -15,7 +15,10 @@ public enum ExceptionEnum {
     MANAGER02(HttpStatus.FORBIDDEN, "MANAGER-02","후원 등록되어 있는 식재료입니다."),
     MANAGER03(HttpStatus.BAD_REQUEST, "MANAGER-03","검색한 식재료가 존재하지 않습니다."),
     REVIEW01(HttpStatus.FORBIDDEN, "REVIEW-01","후원 마감되지 않은 글은 리뷰 작성 불가능 합니다."),
-    OPENAPI01(HttpStatus.BAD_REQUEST, "OPENAPI-01","입력값을 확인해주세요"),
+    OPENAPI01(HttpStatus.BAD_REQUEST, "OPENAPI-01","입력값을 확인해주세요."),
+    OPENAPI02(HttpStatus.FORBIDDEN, "OPENAPI-02","유효 호출건수를 이미 초과하셨습니다."),
+    OPENAPI03(HttpStatus.BAD_REQUEST, "OPENAPI-03","해당하는 데이터가 없습니다."),
+    OPENAPI04(HttpStatus.BAD_REQUEST, "OPENAPI-04","파싱 불가능한 데이터 입니다."),
     AUTHORIZE01(HttpStatus.BAD_REQUEST, "AUTHORIZE-01","인증번호가 맞지 않습니다."),
     SPON01(HttpStatus.FORBIDDEN, "SPON-01","이미 후원이 완료된 물품입니다."),
     POST01(HttpStatus.FORBIDDEN, "POST-01", "인증이 되지 않은 사용자입니다."),
@@ -36,6 +39,7 @@ public enum ExceptionEnum {
 
     PAY01(HttpStatus.BAD_GATEWAY, "PAY-01", "결제 요청 실패"),
     PAY02(HttpStatus.BAD_GATEWAY, "PAY-02", "결제 실패");
+
 
     private final HttpStatus status;
     private final String code;
