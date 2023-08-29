@@ -142,7 +142,8 @@ public class SmsService {
         }
 
         session.setAttribute(phoneNum, key);
-
+        log.info("난수 생성 하기위해 받은 폰 번호={}",phoneNum);
+        log.info("난수 생성 후 저장된 세션={}",session.getAttribute(phoneNum).toString());
         return key.toString();
     }
     public boolean isValidToken(HttpSession session,String phoneNum,String verificationCode){
@@ -151,6 +152,9 @@ public class SmsService {
         return (session.getAttribute(phoneNum).toString()).equals(verificationCode);
     }
     public String verifySms(HttpSession session, String phoneNum,String verificationCode){
+        log.info("사용자가 전송한 번호={}",phoneNum);
+        log.info("사용자가 전송한 인증코드={}",verificationCode);
+        log.info("세션에 저장된 인증코드={}",session.getAttribute(phoneNum).toString());
         if(session.getAttribute(phoneNum) == null){
             // 세션 만료되었을시 에러
             throw new ApiException(ExceptionEnum.AUTHORIZE02);
