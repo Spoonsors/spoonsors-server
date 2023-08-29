@@ -132,6 +132,7 @@ public class SmsService {
     // 5자리의 난수를 조합을 통해 인증코드 만들기
     public static String createSmsKey(HttpServletRequest request, String phoneNum) {
         HttpSession session = request.getSession();
+        session.setMaxInactiveInterval(180); // 세션 유지 시간 180초
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
 
@@ -140,6 +141,7 @@ public class SmsService {
         }
 
         session.setAttribute(phoneNum, key);
+
         return key.toString();
     }
     public boolean isValidToken(HttpSession session,String phoneNum,String verificationCode){
