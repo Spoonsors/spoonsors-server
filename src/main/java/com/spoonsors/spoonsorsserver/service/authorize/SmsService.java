@@ -58,6 +58,7 @@ public class SmsService {
 
     public SmsResponseDto sendSms(HttpServletRequest requests,MessageDto messageDto) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
         String smsConfirmNum = createSmsKey(requests,messageDto.getTo());
+        log.info("사용자에게 전송한 인증코드={}",smsConfirmNum);
         // 현재시간
         String time = Long.toString(System.currentTimeMillis());
 
@@ -145,9 +146,15 @@ public class SmsService {
         return key.toString();
     }
     public boolean isValidToken(HttpSession session,String phoneNum,String verificationCode){
+        log.info("사용자가 전송한 인증코드={}",verificationCode);
+        log.info("세션에 저장된 인증코드={}",session.getAttribute(phoneNum).toString());
         return (session.getAttribute(phoneNum).toString()).equals(verificationCode);
     }
     public String verifySms(HttpSession session, String phoneNum,String verificationCode){
+        if(session.getAttribute(phoneNum) == null){
+            // 세션 만료되었을시 에러
+            throw new ApiException(ExceptionEnum.AUTHORIZE02);
+        }
         if(!isValidToken(session,phoneNum,verificationCode)){
             // 인증 번호 맞지 않을 시 에러
             throw new ApiException(ExceptionEnum.AUTHORIZE01);

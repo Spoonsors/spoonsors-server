@@ -23,6 +23,7 @@ public enum ExceptionEnum {
     OPENAPI04(HttpStatus.BAD_REQUEST, "OPENAPI-04","파싱 불가능한 데이터 입니다."),
 
     AUTHORIZE01(HttpStatus.BAD_REQUEST, "AUTHORIZE-01","인증번호가 맞지 않습니다."),
+    AUTHORIZE02(HttpStatus.BAD_REQUEST, "AUTHORIZE-02","세션이 만료되었습니다."),
 
     SPON01(HttpStatus.FORBIDDEN, "SPON-01","이미 후원이 완료된 물품입니다."),
 
