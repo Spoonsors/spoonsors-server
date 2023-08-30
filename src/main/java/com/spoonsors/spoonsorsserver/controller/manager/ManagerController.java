@@ -1,5 +1,7 @@
 package com.spoonsors.spoonsorsserver.controller.manager;
 
+import com.spoonsors.spoonsorsserver.customException.ApiException;
+import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
 import com.spoonsors.spoonsorsserver.entity.Ingredients;
 import com.spoonsors.spoonsorsserver.entity.manager.CertificateDto;
 import com.spoonsors.spoonsorsserver.entity.manager.IngredientsDto;
@@ -68,12 +70,12 @@ public class ManagerController {
     public List<CertificateDto> certificate(){return managerService.certificate();}
 
     // 수혜자 증명서 등록 상태 변경
-    @PutMapping("/manager/isVerified/{bMember_id}")
-    public String isVeified(@PathVariable String bMember_id){
+    @PutMapping("/manager/isVerified/{bMember_id}/{state}")
+    public String isVeified(@PathVariable String bMember_id, @PathVariable int state){
         String result;
-        result = managerService.isVerified(bMember_id);
+        result = managerService.isVerified(bMember_id, state);
         if(result == null){
-            return "증명서 등록 상태 변경 실패";
+            throw new ApiException(ExceptionEnum.MANAGER04);
         }else {
             return result;
         }

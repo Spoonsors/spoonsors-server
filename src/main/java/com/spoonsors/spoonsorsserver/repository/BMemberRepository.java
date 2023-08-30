@@ -50,9 +50,11 @@ public class BMemberRepository {
     }
     @Modifying
     @Transactional
-    public void updateVerified(String bMember_id){
-        em.createQuery("UPDATE BMember b SET b.is_verified = 1,b.can_post = 1 WHERE b.bMember_id = :bMember_id")
+    public void updateVerified(String bMember_id, int verifiedState, int postState){
+        em.createQuery("UPDATE BMember b SET b.is_verified = :verifiedState,b.can_post = :postState WHERE b.bMember_id = :bMember_id")
                 .setParameter("bMember_id",bMember_id)
+                .setParameter("verifiedState",verifiedState)
+                .setParameter("postState",postState)
                 .executeUpdate();
     }
 

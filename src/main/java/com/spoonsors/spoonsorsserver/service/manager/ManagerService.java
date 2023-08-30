@@ -97,9 +97,15 @@ public class ManagerService {
     }
 
     // 수혜자 증명서 등록 상태 변경
-    public String isVerified(String bMember_id){
+    public String isVerified(String bMember_id, int state){
 
-        bMemberRepository.updateVerified(bMember_id);
-        return bMember_id+ " 수혜자 증명서 등록 상태 변경 완료";
+        if(state==1) {
+            bMemberRepository.updateVerified(bMember_id, state, 1);
+            return bMember_id+ "수혜자 증명서 승낙 완료";
+        }
+        bMemberRepository.updateVerified(bMember_id, state, 0);
+        return bMember_id+ "수혜자 증명서 거절 완료";
+
+
     }
 }
