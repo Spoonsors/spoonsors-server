@@ -14,6 +14,7 @@ public enum ExceptionEnum {
     MANAGER01(HttpStatus.FORBIDDEN, "MANAGER-01","이미 등록되어 있는 식재료입니다."),
     MANAGER02(HttpStatus.FORBIDDEN, "MANAGER-02","후원 등록되어 있는 식재료입니다."),
     MANAGER03(HttpStatus.BAD_REQUEST, "MANAGER-03","검색한 식재료가 존재하지 않습니다."),
+    MANAGER04(HttpStatus.BAD_REQUEST, "MANAGER-04","증명서 등록 상태 변경을 실패하였습니다."),
 
     REVIEW01(HttpStatus.FORBIDDEN, "REVIEW-01","후원 마감되지 않은 글은 리뷰 작성 불가능 합니다."),
 
