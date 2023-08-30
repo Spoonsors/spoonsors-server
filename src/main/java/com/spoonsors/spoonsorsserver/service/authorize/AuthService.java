@@ -32,7 +32,10 @@ public class AuthService {
     @Transactional(readOnly = true)
     public Auth getAuthById(String authId){
         Optional<Auth> result = authRepository.findById(authId);
-
+        Auth auth = result.get();
+        log.info("----------------log----auth---------{}", auth);
+        log.info("----------------log----auth.phn---------{}", auth.getPhoneNum());
+        log.info("----------------log----auth.code---------{}", auth.getCode());
         if(result.isPresent()) {
             return result.get();
         }else {throw new RuntimeException("Database has no Data");}
