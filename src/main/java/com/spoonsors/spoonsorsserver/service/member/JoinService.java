@@ -184,16 +184,16 @@ public class JoinService {
         }
     }
 
-    public String findId(HttpServletRequest request, String name, String phoneNum) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+    public String findId(String name, String phoneNum) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
         {
             if (bMemberRepository.findId(name, phoneNum).isPresent()) {
                 MessageDto messageDto = new MessageDto(phoneNum);
-                smsController.sendSms(request, messageDto);
+                smsController.sendSms(messageDto);
                 return "SUCCESS 사용자 확인 완료";
             }
             if (sMemberRepository.findId(name, phoneNum).isPresent()) {
                 MessageDto messageDto = new MessageDto(phoneNum);
-                smsController.sendSms(request, messageDto);
+                smsController.sendSms(messageDto);
                 return "FAIL 사용자 확인 완료";
             }
             //이름과 번호가 일치하는 아이디가 없음
@@ -201,16 +201,16 @@ public class JoinService {
         }
     }
 
-    public String authorizePwd(HttpServletRequest request, String id, String name, String phoneNum) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+    public String authorizePwd(String id, String name, String phoneNum) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
         {
             if (bMemberRepository.findPwd(id, name, phoneNum).isPresent()) {
                 MessageDto messageDto = new MessageDto(phoneNum);
-                smsController.sendSms(request, messageDto);
+                smsController.sendSms(messageDto);
                 return "사용자 확인 완료";
             }
             if (sMemberRepository.findPwd(id, name, phoneNum).isPresent()) {
                 MessageDto messageDto = new MessageDto(phoneNum);
-                smsController.sendSms(request, messageDto);
+                smsController.sendSms(messageDto);
                 return "사용자 확인 완료";
             }
             //정보 불일치

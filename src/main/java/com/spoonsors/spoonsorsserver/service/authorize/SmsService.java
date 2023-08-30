@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spoonsors.spoonsorsserver.customException.ApiException;
 import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
+import com.spoonsors.spoonsorsserver.entity.authorize.Auth;
 import com.spoonsors.spoonsorsserver.entity.authorize.MessageDto;
 import com.spoonsors.spoonsorsserver.entity.authorize.SmsRequestDto;
 import com.spoonsors.spoonsorsserver.entity.authorize.SmsResponseDto;
@@ -44,6 +45,7 @@ public class SmsService {
 
     //private final SmsRepository smsRepository;
 
+    private final AuthService authService;
     @Value("${naver-cloud-sms.accessKey}")
     private String accessKey;
 
@@ -56,8 +58,8 @@ public class SmsService {
     @Value("${naver-cloud-sms.senderPhone}")
     private String phone;
 
-    public SmsResponseDto sendSms(HttpServletRequest requests,MessageDto messageDto) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
-        String smsConfirmNum = createSmsKey(requests,messageDto.getTo());
+    public SmsResponseDto sendSms(MessageDto messageDto) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
+        String smsConfirmNum = createSmsKey(messageDto.getTo());
         log.info("사용자에게 전송한 인증코드={}",smsConfirmNum);
         // 현재시간
         String time = Long.toString(System.currentTimeMillis());
@@ -131,9 +133,10 @@ public class SmsService {
     }
 
     // 5자리의 난수를 조합을 통해 인증코드 만들기
-    public static String createSmsKey(HttpServletRequest request, String phoneNum) {
-        HttpSession session = request.getSession();
-        session.setMaxInactiveInterval(180); // 세션 유지 시간 180초
+    public String createSmsKey(String phoneNum) {
+
+        Auth auth = new Auth();
+
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
 
@@ -141,21 +144,26 @@ public class SmsService {
             key.append((rnd.nextInt(10)));
         }
 
-        session.setAttribute(phoneNum, key);
+        auth.setPhoneNum(phoneNum);
+        auth.setCode(key.toString());
+        authService.addAuth(auth);
+        log.info("authService.addAuth(auth)={}",authService.addAuth(auth));
+        log.info("난수 생성 하기위해 받은 폰 번호={}",phoneNum);
 
         return key.toString();
     }
-    public boolean isValidToken(HttpSession session,String phoneNum,String verificationCode){
-        log.info("사용자가 전송한 인증코드={}",verificationCode);
-        log.info("세션에 저장된 인증코드={}",session.getAttribute(phoneNum).toString());
-        return (session.getAttribute(phoneNum).toString()).equals(verificationCode);
+    public boolean isValidToken(String phoneNum,String verificationCode){
+        return authService.getAuthById(phoneNum).getCode().equals(verificationCode);
     }
-    public String verifySms(HttpSession session, String phoneNum,String verificationCode){
-        if(session.getAttribute(phoneNum) == null){
+    public String verifySms(String phoneNum,String verificationCode){
+        log.info("사용자가 전송한 번호={}",phoneNum);
+        log.info("사용자가 전송한 인증코드={}",verificationCode);
+
+        if(authService.getAuthById(phoneNum) == null){
             // 세션 만료되었을시 에러
             throw new ApiException(ExceptionEnum.AUTHORIZE02);
         }
-        if(!isValidToken(session,phoneNum,verificationCode)){
+        if(!isValidToken(phoneNum,verificationCode)){
             // 인증 번호 맞지 않을 시 에러
             throw new ApiException(ExceptionEnum.AUTHORIZE01);
         }

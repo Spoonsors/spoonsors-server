@@ -27,19 +27,18 @@ public class SmsController {
     private final SmsService smsService;
 
     @PostMapping("/sms/send")
-    public SmsResponseDto sendSms(HttpServletRequest request, @RequestBody MessageDto messageDto) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+    public SmsResponseDto sendSms(@RequestBody MessageDto messageDto) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
 
-        SmsResponseDto responseDto = smsService.sendSms(request, messageDto);
+        SmsResponseDto responseDto = smsService.sendSms(messageDto);
 
         return responseDto;
     }
 
     @PostMapping("/sms/verify")
-    public String verifySms(HttpServletRequest request,@RequestBody Map<String,String> verification) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+    public String verifySms(@RequestBody Map<String,String> verification) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
         String verfication;
 
-        verfication = smsService.verifySms(request.getSession(),verification.get("phoneNum"), verification.get("code"));
-            request.getSession().invalidate();
-            return verfication;
+        verfication = smsService.verifySms(verification.get("phoneNum"), verification.get("code"));
+        return verfication;
     }
 }
