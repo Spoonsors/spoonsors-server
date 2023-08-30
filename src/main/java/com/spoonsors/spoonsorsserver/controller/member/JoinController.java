@@ -49,20 +49,23 @@ public class JoinController {
     }
 
     // 아이디 찾기(이름 번호 match)
+//    @PostMapping("/join/matchId")
+//    public String findId(HttpServletRequest request, @RequestBody Map<String,String> find) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+//        return joinService.findId(request, find.get("name"),find.get("phoneNum"));
+//    }
     @PostMapping("/join/matchId")
-    public String findId(HttpServletRequest request, @RequestBody Map<String,String> find) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
-        return joinService.findId(request, find.get("name"),find.get("phoneNum"));
+    public String findId(@RequestBody Map<String,String> find) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+        return joinService.findId(find.get("name"),find.get("phoneNum"));
     }
     //아이디 찾기 인증확인
     @PostMapping("/join/findId")
-    public String verifyFindId(HttpServletRequest request,@RequestBody Map<String,String> verification) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+    public String verifyFindId(@RequestBody Map<String,String> verification) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
         String verify;
-        verify = smsService.verifySms(request.getSession(),verification.get("phoneNum"), verification.get("code"));
+        verify = smsService.verifySms(verification.get("phoneNum"), verification.get("code"));
         if(verify == null) {
             throw new ApiException(ExceptionEnum.AUTHORIZE01); //인증번호 불일치
         }else{
             verify = joinService.verifyFindId(verification.get("name"),verification.get("phoneNum"));
-            request.getSession().invalidate();
             return verify;
         }
     }
@@ -71,19 +74,18 @@ public class JoinController {
     public String matchId(@PathVariable String memberId){ return joinService.matchId(memberId);}
     // 비밀번호 변경(문자인증(아이디, 이름, 폰 번호 일치해야함))
     @PostMapping("/join/matchPwd")
-    public String authorizePwd(HttpServletRequest request, @RequestBody Map<String,String> find) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
-        return joinService.authorizePwd(request,find.get("id"), find.get("name"),find.get("phoneNum"));
+    public String authorizePwd(@RequestBody Map<String,String> find) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+        return joinService.authorizePwd(find.get("id"), find.get("name"),find.get("phoneNum"));
     }
     // 비밀번호 변경(인증 확인)
     @PostMapping("/join/verifyPwd")
-    public String verifyPwd(HttpServletRequest request,@RequestBody Map<String,String> verification){
+    public String verifyPwd(@RequestBody Map<String,String> verification){
         String verify;
-        verify = smsService.verifySms(request.getSession(),verification.get("phoneNum"), verification.get("code"));
+        verify = smsService.verifySms(verification.get("phoneNum"), verification.get("code"));
         if(verify == null) {
             throw new ApiException(ExceptionEnum.AUTHORIZE01); //인증번호 불일치
         }else{
             verify = "인증완료 되었습니다.";
-            request.getSession().invalidate();
             return verify;
         }
     }
