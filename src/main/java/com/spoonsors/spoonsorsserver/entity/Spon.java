@@ -1,5 +1,6 @@
 package com.spoonsors.spoonsorsserver.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -37,5 +38,6 @@ public class Spon {
     @ColumnDefault("0")
     private Integer spon_state; // 디폴트 설정
 
+    @JsonIgnore
     private String tid; //결제 고유 번호
 }
