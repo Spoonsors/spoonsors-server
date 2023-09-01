@@ -3,6 +3,8 @@ package com.spoonsors.spoonsorsserver.service.notificatin;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.spoonsors.spoonsorsserver.customException.ApiException;
+import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
 import com.spoonsors.spoonsorsserver.entity.Post;
 import com.spoonsors.spoonsorsserver.entity.SMember;
 import com.spoonsors.spoonsorsserver.entity.Spon;
@@ -12,6 +14,8 @@ import com.spoonsors.spoonsorsserver.repository.ISMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.ISponRepository;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -35,7 +39,7 @@ public class FCMService {
         String body="";
         Long postId= 0L;
 
-        if(state.equals("매칭")){
+        if(state.equals("매칭")){ //target token = 자립 준비 청년 토큰, targetId: 자립 준비 청년 아이디
             Optional<SMember> optionalSMember = isMemberRepository.findById(targetId);
             String targetNickname = optionalSMember.get().getSMember_nickname();
 
@@ -53,7 +57,10 @@ public class FCMService {
             postId=post.getPost_id();
             title="리뷰 등록!";
             body=post.getBMember().getBMember_nickname()+"님이 후원 감사 리뷰를 보냈어요. 지금 확인해 보세요!";
+        }else{
+            throw new ApiException(ExceptionEnum.PUSH01);
         }
+
         String message = makeMessage(targetToken, title, body);
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
@@ -66,7 +73,6 @@ public class FCMService {
 
         Response response = client.newCall(request).execute();
 
-        System.out.println(response.body().string());
         return postId;
     }
 
@@ -85,7 +91,7 @@ public class FCMService {
     }
 
     private String getAccessToken() throws IOException {
-        String firebaseConfigPath = "firebase/firebase_service_key.json";
+        String firebaseConfigPath="firebase/spoonsors-53f69990eebe.json";
 
         GoogleCredentials googleCredentials = GoogleCredentials
                 .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())

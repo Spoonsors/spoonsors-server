@@ -46,7 +46,9 @@ public enum ExceptionEnum {
     LOGIN05(HttpStatus.BAD_REQUEST, "LOGIN-05", "아이디 또는 비밀번호가 일치하지 않습니다."),
 
     PAY01(HttpStatus.BAD_GATEWAY, "PAY-01", "결제 요청 실패"),
-    PAY02(HttpStatus.BAD_GATEWAY, "PAY-02", "결제 실패");
+    PAY02(HttpStatus.BAD_GATEWAY, "PAY-02", "결제 실패"),
+
+    PUSH01(HttpStatus.BAD_REQUEST, "PUSH-01", "state가 올바르지 않습니다.");
 
 
     private final HttpStatus status;
