@@ -20,10 +20,10 @@ public class SponRepository {
         spon.setTid(tid);
     }
 
-    public Optional<Spon> findByTid(String tid) {
+    public List<Spon> findByTid(String tid) {
         return em.createQuery("SELECT s FROM Spon s WHERE s.tid = :tid", Spon.class)
                 .setParameter("tid", tid)
-                .getResultList().stream().findAny();
+                .getResultList();
     }
 
     public List<Spon> checkSpon(Long postId){

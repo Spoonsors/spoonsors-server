@@ -51,31 +51,32 @@ public class SponService {
     //후원 신청(후원자)
    public String applySpon(String tid, String sMemberId){
 
-       Optional <Spon> optionalSpon = sponRepository.findByTid(tid);
-       Spon spon = optionalSpon.get();
+       List <Spon> sponList = sponRepository.findByTid(tid);
 
         Optional<SMember> optionalSMember = iSMemberRepository.findById(sMemberId);
         SMember sMember = optionalSMember.get();
 
        Date date = new Date();
-       Post post = spon.getPost();
-       Spon spon2=Spon.builder()
-                .spon_id(spon.getSpon_id())
-                .spon_date(date)
-                .ingredients(spon.getIngredients())
-                .sMember(sMember)
-                .post(post)
-                .spon_state(1)
-               .tid(tid)
-                .build();
+        for(int i=0;i<sponList.size();i++){
+            Post post = sponList.get(i).getPost();
+            Spon spon2=Spon.builder()
+                    .spon_id(sponList.get(i).getSpon_id())
+                    .spon_date(date)
+                    .ingredients(sponList.get(i).getIngredients())
+                    .sMember(sMember)
+                    .post(post)
+                    .spon_state(1)
+                    .tid(tid)
+                    .build();
 
-       iSponRepository.save(spon2);
+            iSponRepository.save(spon2);
 
-       postRepository.changeRemain(post.getPost_id());
-       //자동으로 post상태 바꿔주는 코드
-       if(post.getRemain_spon()==0){ //더이상 남은 후원이 없으면 글 완료 처리
-           postRepository.changeState(post.getPost_id());
-       }
+            postRepository.changeRemain(post.getPost_id());
+            //자동으로 post상태 바꿔주는 코드
+            if(post.getRemain_spon()==0){ //더이상 남은 후원이 없으면 글 완료 처리
+                postRepository.changeState(post.getPost_id());
+            }
+        }
 
        return "후원 완료";
    }
